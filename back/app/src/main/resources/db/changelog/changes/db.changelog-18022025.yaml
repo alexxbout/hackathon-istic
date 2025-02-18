@@ -1,0 +1,302 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1739872766784-1
+      author: Busea (generated)
+      changes:
+        - createSequence:
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 50
+            maxValue: 9223372036854775807
+            minValue: 1
+            sequenceName: projet_seq
+            startValue: 1
+  - changeSet:
+      id: 1739872766784-2
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: competence_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+            tableName: competence
+  - changeSet:
+      id: 1739872766784-3
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: match_pool_competence_pkey
+                  name: competence_id
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: match_pool_competence_pkey
+                  name: pool_id
+                  type: INTEGER
+            tableName: match_pool_competence
+  - changeSet:
+      id: 1739872766784-4
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: match_profil_competence_pkey
+                  name: competence_id
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: match_profil_competence_pkey
+                  name: profil_id
+                  type: INTEGER
+            tableName: match_profil_competence
+  - changeSet:
+      id: 1739872766784-5
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: experience
+                  type: INTEGER
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pool_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: email_user
+                  type: VARCHAR(255)
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+            tableName: pool
+  - changeSet:
+      id: 1739872766784-6
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: experience
+                  type: INTEGER
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: profil_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: site_id
+                  type: INTEGER
+              - column:
+                  name: cv_url
+                  type: VARCHAR(255)
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+              - column:
+                  name: prenom
+                  type: VARCHAR(255)
+            tableName: profil
+  - changeSet:
+      id: 1739872766784-7
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: projet_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: date_debut
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: date_fin
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: nom
+                  type: VARCHAR(255)
+            tableName: projet
+  - changeSet:
+      id: 1739872766784-8
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: reservation_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: id_projet
+                  type: INTEGER
+              - column:
+                  name: profil_id
+                  type: INTEGER
+              - column:
+                  name: date_debut
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: date_fin
+                  type: TIMESTAMP WITHOUT TIME ZONE
+            tableName: reservation
+  - changeSet:
+      id: 1739872766784-9
+      author: Busea (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: site_addr_pkey
+                  name: id
+                  type: INTEGER
+              - column:
+                  name: ville
+                  type: VARCHAR(255)
+            tableName: site_addr
+  - changeSet:
+      id: 1739872766784-10
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: profil_id
+            baseTableName: match_profil_competence
+            constraintName: fk39y6t9qisf23lu09f4mowi1sh
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: profil
+            validate: true
+  - changeSet:
+      id: 1739872766784-11
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id_projet
+            baseTableName: reservation
+            constraintName: fk51xsnkjxvmc755r37mvkm1bgv
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: projet
+            validate: true
+  - changeSet:
+      id: 1739872766784-12
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: pool_id
+            baseTableName: match_pool_competence
+            constraintName: fk6uu19l40lbk1n0b1b09jkf128
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: pool
+            validate: true
+  - changeSet:
+      id: 1739872766784-13
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: competence_id
+            baseTableName: match_profil_competence
+            constraintName: fkjcvtke9i8ru5wqw5vnousncih
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: competence
+            validate: true
+  - changeSet:
+      id: 1739872766784-14
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: competence_id
+            baseTableName: match_pool_competence
+            constraintName: fklffi5mk6b91jfk859dh7hxvbx
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: competence
+            validate: true
+  - changeSet:
+      id: 1739872766784-15
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: site_id
+            baseTableName: profil
+            constraintName: fknmpo7tdwbbdsuuguo38p4rbc2
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: site_addr
+            validate: true
+  - changeSet:
+      id: 1739872766784-16
+      author: Busea (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: profil_id
+            baseTableName: reservation
+            constraintName: fkt1x7c2ycmp2s2xwm54t6qa0v1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: profil
+            validate: true
+
