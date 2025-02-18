@@ -17,6 +17,5 @@ export default defineNuxtConfig({
       error: '#F56C6C',
       neutral: '#35495E'
     },
-
   }
 })
