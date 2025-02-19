@@ -9,6 +9,7 @@
                 </div>
                 <div class="flex items-center justify-center w-max gap-x-2">
                     <UButton v-if="role != 'cdp'" variant="soft" color="gray" icon="lucide:user-plus">Créer un nouveau profil</UButton>
+                    <UButton v-if="role != 'rh'" @click="handleAddProfiles" variant="soft" color="green" icon="lucide:mouse-pointer-click">Ajouter la sélection à un projet</UButton>
                     <UButton @click="handleClearFilters" variant="soft" color="red" icon="lucide:circle-x">Effacer les filtres</UButton>
                     <UButton v-if="role != 'rh'" @click="handleUnselectAll" variant="soft" color="yellow" icon="lucide:circle-slash-2">Tout désélectionner</UButton>
                 </div>
@@ -183,5 +184,9 @@ const handleUnselectAll = async () => {
     hotreload.value = false;
     await nextTick();
     hotreload.value = true;
+};
+
+const handleAddProfiles = () => {
+    console.log("Ajout des profils sélectionnés à un projet...");
 };
 </script>
