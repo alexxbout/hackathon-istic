@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center bg-gray-100">
+    <div class="flex justify-center items-center w-max">
         <UCard class="min-w-[400px] border-2 border-transparent group hover:border-green-500 duration-200 cursor-pointer relative" :class="isChecked ? 'border-green-500' : ''" @click="toggleCheckbox">
             <div class="flex items-center justify-between">
                 <!-- Avatar + Identitié -->
