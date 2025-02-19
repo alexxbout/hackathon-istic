@@ -13,24 +13,31 @@
                 {{ link.label }}
             </ULink>
         </div>
-
-        <!-- Conteneur du bouton avec un petit espace de marge sur la droite -->
-        <UButton size="md" color="black" variant="solid" class="flex justify-center items-center gap-x-2">
-            <!-- Avatar inséré ici -->
-            <span>Marion Durant</span>
-            <UAvatar alt="Photo de profile" size="sm" class="w-8 h-8" />
-        </UButton>
+        <div class="flex items-center gap-x-4">
+            <UButton size="xl" color="black" variant="outline" :ui="{ rounded: 'rounded-full' }" disabled class="cursor-not-allowed opacity-60">
+                {{role === 'rh' ? 'RH' : 'Chef de projet' }}
+            </UButton>
+            <UButton size="md" color="black" variant="solid" class="flex justify-center items-center gap-x-2">
+                <span>Marion Durant</span>
+                <UAvatar alt="Photo de profil" size="sm" class="w-8 h-8" />
+            </UButton>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import type { Role } from "../types/roles";
+
 
 const links: { label: string; icon: string; to: string }[] = [
     { label: "Profils", icon: "lucide:users", to: "/profils" },
     { label: "Pools", icon: "material-symbols:filter-alt-outline", to: "/pools" },
     { label: "Projects", icon: "tabler:clipboard-list", to: "/projects" },
 ];
+
+
+const role = ref<Role>("rh");
 
 const route = useRoute();
 const currentRoute = ref(route.name);
