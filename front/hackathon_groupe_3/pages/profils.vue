@@ -108,7 +108,7 @@ const customProfils: CustomProfil[] = [
 ];
 
 // Options des filtres
-const experienceOptions = ref<{ value: number; label: string }[]>(customProfils.map((customProfil) => ({ value: customProfil.profil.experience, label: `+${customProfil.profil.experience} ans` })));
+const experienceOptions = ref<{ value: number; label: string }[]>(customProfils.map((customProfil) => ({ value: customProfil.profil.experience, label: `+${customProfil.profil.experience} ans` })).sort((a, b) => a.value - b.value));
 const skillOptions = ref<{ value: number; label: string }[]>([
     { value: 1, label: "JavaScript" },
     { value: 2, label: "TypeScript" },
