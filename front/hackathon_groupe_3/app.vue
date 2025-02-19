@@ -7,5 +7,5 @@
 
 <script lang="ts" setup>
 // TODO: Update this with real authentication logic
-const isLogged = ref(false);
+const isLogged = ref(true);
 </script>
