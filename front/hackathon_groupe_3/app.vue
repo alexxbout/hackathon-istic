@@ -1,10 +1,11 @@
 <template>
-    <div>
-        <NuxtLayout>
-            <Header />
-            <NuxtPage />
-        </NuxtLayout>
-    </div>
+    <NuxtLayout>
+        <Header v-if="isLogged" />
+        <NuxtPage />
+    </NuxtLayout>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+// TODO: Update this with real authentication logic
+const isLogged = ref(false);
+</script>
