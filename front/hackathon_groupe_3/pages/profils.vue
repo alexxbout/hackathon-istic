@@ -28,7 +28,6 @@
 
 <script lang="ts" setup>
 import { computed, nextTick, ref } from "vue";
-import type Card from "~/components/Card.vue";
 import type SearchBar from "~/components/SearchBar.vue";
 import type { Competence, Profil } from "~/types/entities";
 import type { Role } from "~/types/roles";
@@ -38,7 +37,7 @@ interface CustomProfil {
     competences: Competence[];
 }
 
-const role = ref<Role>("cdp");
+const role = ref<Role>("rh");
 const searchBarElement = ref<InstanceType<typeof SearchBar>>();
 const page = ref(1);
 const itemsPerPage = 6;
