@@ -8,7 +8,7 @@
                     <span class="text-2xl self-end">({{ filteredCustomProfils.length }})</span>
                 </div>
                 <div class="flex items-center justify-center w-max gap-x-2">
-                    <UButton v-if="role != 'rh'" variant="soft" color="gray" icon="lucide:user-plus">Créer un nouveau profil</UButton>
+                    <UButton v-if="role != 'cdp'" variant="soft" color="gray" icon="lucide:user-plus">Créer un nouveau profil</UButton>
                     <UButton @click="handleClearFilters" variant="soft" color="red" icon="lucide:circle-x">Effacer les filtres</UButton>
                     <UButton v-if="role != 'rh'" @click="handleUnselectAll" variant="soft" color="yellow" icon="lucide:circle-slash-2">Tout désélectionner</UButton>
                 </div>
@@ -37,7 +37,7 @@ interface CustomProfil {
     competences: Competence[];
 }
 
-const role = ref<Role>("rh");
+const role = ref<Role>("cdp");
 const searchBarElement = ref<InstanceType<typeof SearchBar>>();
 const page = ref(1);
 const itemsPerPage = 6;
@@ -64,6 +64,43 @@ const customProfils: CustomProfil[] = [
     {
         profil: { id: 2, nom: "Doe", prenom: "Jane", experience: 3, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
         competences: [
+            { id: 3, nom: "Vue.js" },
+            { id: 4, nom: "React" },
+        ],
+    },
+    {
+        profil: { id: 3, nom: "Doe", prenom: "Alice", experience: 2, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        competences: [
+            { id: 1, nom: "JavaScript" },
+            { id: 3, nom: "Vue.js" },
+        ],
+    },
+    {
+        profil: { id: 4, nom: "Doe", prenom: "Bob", experience: 1, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        competences: [
+            { id: 2, nom: "TypeScript" },
+            { id: 4, nom: "React" },
+        ],
+    },
+    {
+        profil: { id: 5, nom: "Doe", prenom: "Eve", experience: 4, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        competences: [
+            { id: 1, nom: "JavaScript" },
+            { id: 4, nom: "React" },
+        ],
+    },
+    {
+        profil: { id: 6, nom: "Doe", prenom: "Charlie", experience: 6, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        competences: [
+            { id: 2, nom: "TypeScript" },
+            { id: 3, nom: "Vue.js" },
+        ],
+    },
+    {
+        profil: { id: 7, nom: "Doe", prenom: "David", experience: 7, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        competences: [
+            { id: 1, nom: "JavaScript" },
+            { id: 2, nom: "TypeScript" },
             { id: 3, nom: "Vue.js" },
             { id: 4, nom: "React" },
         ],
