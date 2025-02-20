@@ -29,7 +29,7 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "Get all reservations; if profilId is provided, get projets by profilId")
-    public ResponseEntity<List<ReservationDto>> getReservations(@RequestParam(required = false) Long profilId) {
+    public ResponseEntity<List<ReservationDto>> getReservations(@PathVariable(required = false) Long profilId) {
 
         List<Reservation> reservations;
         if (profilId == null) {

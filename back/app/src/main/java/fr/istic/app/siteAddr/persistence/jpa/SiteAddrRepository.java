@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface SiteAddrRepository extends JpaRepository<SiteAddr, Long> {
 
     Optional<SiteAddr> findByVille(String ville);
+
 }

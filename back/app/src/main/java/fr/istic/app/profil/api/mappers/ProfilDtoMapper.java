@@ -27,11 +27,16 @@ public interface ProfilDtoMapper {
 
     @Named("competencesToDto")
     default List<CompetenceDto> competencesToDto(List<MatchProfilCompetence> competences) {
+        if (competences == null) { // ✅ Vérification pour éviter NullPointerException
+            return List.of();
+        }
+
         var competenceDtoMapper = CompetenceDtoMapper.INSTANCE;
 
         return competences.stream()
                 .map(competence -> competenceDtoMapper.toDto(competence.getCompetence()))
                 .toList();
     }
+
 
 }

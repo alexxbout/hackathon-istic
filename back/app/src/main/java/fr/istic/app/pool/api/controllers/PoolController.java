@@ -30,7 +30,7 @@ public class PoolController {
 
     @GetMapping
     @Operation(summary = "Get all pools; if userMail is provided, get pools by userMail")
-    public ResponseEntity<List<PoolDto>> getPools(@RequestParam(required = false) String userMail) {
+    public ResponseEntity<List<PoolDto>> getPools(@PathVariable(required = false) String userMail) {
 
         List<Pool> pools;
         if (userMail == null) {

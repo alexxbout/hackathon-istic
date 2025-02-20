@@ -56,7 +56,7 @@ public class ProfilController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a profil by id")
-    public ResponseEntity<ProfilDto> updateProfil(@RequestParam Long id, @RequestBody UpdateProfilUseCase.UpdateProfilUseCaseDto profilDto) {
+    public ResponseEntity<ProfilDto> updateProfil(@PathVariable Long id, @RequestBody UpdateProfilUseCase.UpdateProfilUseCaseDto profilDto) {
         var updated = this.updateProfilDtoUseCase.update(id, profilDto);
         var mapped = this.profilDtoMapper.toDto(updated);
         return ResponseEntity.ok(mapped);
@@ -64,7 +64,7 @@ public class ProfilController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a profil by id")
-    public ResponseEntity<ProfilDto> deleteProfil(@RequestParam Long id) {
+    public ResponseEntity<ProfilDto> deleteProfil(@PathVariable Long id) {
 
         this.deleteProfilUseCase.delete(id);
         return ResponseEntity.ok().build();
@@ -73,7 +73,7 @@ public class ProfilController {
 
     @GetMapping("/search")
     @Operation(summary = "Search a profil by competence, experience, date_debut, date_fin")
-    public ResponseEntity<List<ProfilDto>> searchProfil(@RequestParam List<Long> competence, @RequestParam Integer experience, @RequestParam String date_debut, @RequestParam String date_fin) {
+    public ResponseEntity<List<ProfilDto>> searchProfil(@PathVariable List<Long> competence, @PathVariable Integer experience, @PathVariable String date_debut, @PathVariable String date_fin) {
         //TODO
         return ResponseEntity.status(204).build();
     }

@@ -29,9 +29,10 @@ public class CreateProfilDtoUseCase {
     public Profil create(CreateProfilDto dto) {
         //TODO add validation
 
-        var siteAddr = this.siteAddrRepository
-                .findByVille(dto.ville)
-                .orElse(this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)));
+        var siteAddrs = this.siteAddrRepository.findByVille(dto.ville);
+        var siteAddr = siteAddrs.isEmpty() ?
+                this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)) :
+                siteAddrs.get();
 
         Profil profil = Profil.builder()
                 .nom(dto.nom)
@@ -48,13 +49,7 @@ public class CreateProfilDtoUseCase {
 
         var competenceProfilRelations = competences
                 .stream()
-                .map(competence ->
-                        MatchProfilCompetence
-                                .builder()
-                                .profil(profil)
-                                .competence(competence)
-                                .build()
-                )
+                .map(competence -> new MatchProfilCompetence(profil, competence))
                 .toList();
 
         var saved = this.profilRepository.save(profil);
