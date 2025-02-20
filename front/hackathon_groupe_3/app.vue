@@ -2,6 +2,8 @@
     <NuxtLayout>
         <Header v-if="isLogged" />
         <NuxtPage />
+        <UModals />
+        <UNotifications />
     </NuxtLayout>
 </template>
 

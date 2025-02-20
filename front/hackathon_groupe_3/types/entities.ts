@@ -9,8 +9,14 @@ export interface Profil {
     prenom: string;
     experience: number;
     site_id: number;
-    cv_url: string;
+    cv_url?: string;
     profile_picture: string;
+    ville: string;
+}
+
+export interface ProfilCompetences {
+    profil: Profil;
+    competences: Competence[];
 }
 
 export interface Projet {
