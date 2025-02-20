@@ -9,8 +9,13 @@
         <div class="flex items-center justify-between">
             <!-- Avatar + Identitié -->
             <div class="flex items-center justify-center gap-x-2">
-                <UAvatar :src="props.photo" size="lg" alt="Photo de profil"  />
-                <span class="text-lg font-semibold">{{ props.prenom }} {{ props.nom }}</span>
+                <UAvatar :src="props.photo" size="lg" alt="Photo de profil" />
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold">{{ props.prenom }} {{ props.nom }}</span>
+                    <UBadge variant="soft" :ui="{ rounded: 'rounded-full' }" :color="getColor(props.experience)" class="w-fit">
+                        {{ getExperienceLabel(props.experience) }}
+                    </UBadge>
+                </div>
             </div>
 
             <!-- Checkbox Nuxt UI conditionnellement affichée -->
@@ -32,6 +37,7 @@ const props = defineProps<{
     prenom: string;
     role: Role;
     isChecked?: boolean;
+    experience: number;
 }>();
 
 const isChecked = ref(props.isChecked ?? false);
@@ -40,5 +46,17 @@ const toggleCheckbox = () => {
     if (props.role != "rh") {
         isChecked.value = !isChecked.value;
     }
+};
+
+const getColor = (experience: number) => {
+    if (experience > 5) return "yellow";
+    else if (experience >= 3) return "red";
+    return "green";
+};
+
+const getExperienceLabel = (experience: number) => {
+    if (experience > 5) return "Sénior";
+    else if (experience >= 3) return "Confirmé";
+    return "Junior";
 };
 </script>
