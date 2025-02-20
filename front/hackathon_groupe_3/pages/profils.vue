@@ -8,10 +8,10 @@
                     <span class="text-2xl self-end">({{ filteredCustomProfils.length }})</span>
                 </div>
                 <div class="flex items-center justify-center w-max gap-x-2">
-                    <UButton v-if="role != 'cdp'" variant="soft" color="gray" icon="lucide:user-plus">Créer un nouveau profil</UButton>
-                    <UButton v-if="role != 'rh'" @click="handleAddProfiles" variant="soft" color="green" icon="lucide:mouse-pointer-click">Ajouter la sélection à un projet</UButton>
-                    <UButton @click="handleClearFilters" variant="soft" color="red" icon="lucide:circle-x">Effacer les filtres</UButton>
-                    <UButton v-if="role != 'rh'" @click="handleUnselectAll" variant="soft" color="yellow" icon="lucide:circle-slash-2">Tout désélectionner</UButton>
+                    <UButton v-if="role != 'cdp'" @click="handleCreateProfile" variant="soft" color="gray" icon="lucide:user-plus">{{ createProfileButton }}</UButton>
+                    <UButton v-if="role != 'rh'" @click="handleAddProfiles" variant="soft" color="green" icon="lucide:mouse-pointer-click">{{ addSelectionToProject }}</UButton>
+                    <UButton @click="handleClearFilters" variant="soft" color="red" icon="lucide:circle-x">{{ clearFilters }}</UButton>
+                    <UButton v-if="role != 'rh'" @click="handleUnselectAll" variant="soft" color="yellow" icon="lucide:circle-slash-2">{{ deselectAll }}</UButton>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
             <SearchBar ref="searchBarElement" :role="role" :experienceOptions="experienceOptions" :skillOptions="skillOptions" @updateSkills="updateSkills" @updateExperience="updateExperience" @updatePeriod="updatePeriod" />
 
             <div v-if="hotreload" class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
-                <Card v-for="customProfil in paginatedCustomProfils" :key="customProfil.profil.id" :photo="customProfil.profil.profile_picture" :nom="customProfil.profil.nom" :prenom="customProfil.profil.prenom" :role="role" :experience="customProfil.profil.experience" :isChecked="selectedProfiles.has(customProfil.profil.id)" @click="toggleSelection(customProfil.profil.id)" />
+                <Card v-for="customProfil in paginatedCustomProfils" @@click="handleShowDetails(customProfil.profil.id)" @click="toggleSelection(customProfil.profil.id)" :key="customProfil.profil.id" :id="customProfil.profil.id" :photo="customProfil.profil.profile_picture" :nom="customProfil.profil.nom" :prenom="customProfil.profil.prenom" :role="role" :experience="customProfil.profil.experience" :isChecked="selectedProfiles.has(customProfil.profil.id)" />
             </div>
 
             <UPagination v-show="filteredCustomProfils.length > 6" v-model="page" size="xl" :total="filteredCustomProfils.length" :page-count="6" />
@@ -29,8 +29,10 @@
 
 <script lang="ts" setup>
 import { computed, nextTick, ref } from "vue";
+import ProfileModal from "~/components/modals/ProfileModal.vue";
 import type SearchBar from "~/components/SearchBar.vue";
-import type { Competence, Profil } from "~/types/entities";
+import type { Competence, Profil, ProfilCompetences } from "~/types/entities";
+import { ProfilModalMode } from "~/types/modals";
 import type { Role } from "~/types/roles";
 
 interface CustomProfil {
@@ -38,12 +40,15 @@ interface CustomProfil {
     competences: Competence[];
 }
 
-const role = ref<Role>("cdp");
+const modal = useModal();
+
+const role = ref<Role>("rh");
 const searchBarElement = ref<InstanceType<typeof SearchBar>>();
 const page = ref(1);
 const itemsPerPage = 6;
 const selectedProfiles = ref(new Set<number>());
 const hotreload = ref(true);
+const modalState = ref();
 
 // États des filtres
 const selectedSkills = ref<number[]>([]);
@@ -53,52 +58,58 @@ const selectedPeriod = ref<{ start: Date; end: Date | number }>({
     end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
 });
 
+// Bouton de création de profil
+const createProfileButton = ref<string>("Créer un profil");
+const addSelectionToProject = ref<string>("Ajouter à un projet...");
+const clearFilters = ref<string>("Effacer les filtres");
+const deselectAll = ref<string>("Tout désélectionner");
+
 // Données des profils (exemple)
 const customProfils: CustomProfil[] = [
     {
-        profil: { id: 1, nom: "Doe", prenom: "John", experience: 5, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 1, nom: "Doe", prenom: "John", experience: 5, site_id: 1, cv_url: "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf", profile_picture: "https://i.pravatar.cc/300", ville: "Paris" },
         competences: [
             { id: 1, nom: "JavaScript" },
             { id: 2, nom: "TypeScript" },
         ],
     },
     {
-        profil: { id: 2, nom: "Doe", prenom: "Jane", experience: 3, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 2, nom: "Doe", prenom: "Jane", experience: 3, site_id: 1, cv_url: "https://www.resumeviking.com/wp-content/uploads/2022/02/Moscow-Creative-Resume-Template.pdf", profile_picture: "https://i.pravatar.cc/300", ville: "Lyon" },
         competences: [
             { id: 3, nom: "Vue.js" },
             { id: 4, nom: "React" },
         ],
     },
     {
-        profil: { id: 3, nom: "Doe", prenom: "Alice", experience: 2, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 3, nom: "Doe", prenom: "Alice", experience: 2, site_id: 1, cv_url: "https://www.resumeviking.com/wp-content/uploads/2022/02/Cape-Town-Resume-Template-Retro-Creative.pdf", profile_picture: "https://i.pravatar.cc/300", ville: "Marseille" },
         competences: [
             { id: 1, nom: "JavaScript" },
             { id: 3, nom: "Vue.js" },
         ],
     },
     {
-        profil: { id: 4, nom: "Doe", prenom: "Bob", experience: 1, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 4, nom: "Doe", prenom: "Bob", experience: 1, site_id: 1, profile_picture: "https://i.pravatar.cc/300", ville: "Toulouse" },
         competences: [
             { id: 2, nom: "TypeScript" },
             { id: 4, nom: "React" },
         ],
     },
     {
-        profil: { id: 5, nom: "Doe", prenom: "Eve", experience: 4, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 5, nom: "Doe", prenom: "Eve", experience: 4, site_id: 1, profile_picture: "https://i.pravatar.cc/300", ville: "Nice" },
         competences: [
             { id: 1, nom: "JavaScript" },
             { id: 4, nom: "React" },
         ],
     },
     {
-        profil: { id: 6, nom: "Doe", prenom: "Charlie", experience: 6, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 6, nom: "Doe", prenom: "Charlie", experience: 6, site_id: 1, profile_picture: "https://i.pravatar.cc/300", ville: "Nantes" },
         competences: [
             { id: 2, nom: "TypeScript" },
             { id: 3, nom: "Vue.js" },
         ],
     },
     {
-        profil: { id: 7, nom: "Doe", prenom: "David", experience: 7, site_id: 1, cv_url: "https://www.google.com", profile_picture: "https://i.pravatar.cc/300" },
+        profil: { id: 7, nom: "Doe", prenom: "David", experience: 7, site_id: 1, profile_picture: "https://i.pravatar.cc/300", ville: "Bordeaux" },
         competences: [
             { id: 1, nom: "JavaScript" },
             { id: 2, nom: "TypeScript" },
@@ -188,5 +199,50 @@ const handleUnselectAll = async () => {
 
 const handleAddProfiles = () => {
     console.log("Ajout des profils sélectionnés à un projet...");
+};
+
+const handleCreateProfile = () => {
+    console.log("Création d'un profil...");
+
+    modalState.value = ProfilModalMode.CREATE;
+
+    modal.open(ProfileModal, {
+        mode: modalState.value,
+        onUpdate: (newMode: ProfilModalMode) => {
+            console.log("Mode mis à jour :", newMode);
+            modalState.value = newMode;
+        },
+        onClose() {
+            console.log("Fermeture du modal");
+            modal.close();
+        },
+    });
+};
+
+const createProfilCompetences = (profilId: number): ProfilCompetences => {
+    const profil = customProfils.find((customProfil) => customProfil.profil.id === profilId)!.profil;
+    return {
+        profil: profil,
+        competences: customProfils.find((customProfil) => customProfil.profil.id === profilId)!.competences,
+    };
+};
+
+const handleShowDetails = (id: number) => {
+    console.log("Affichage des détails du profil", id);
+
+    modalState.value = ProfilModalMode.INFO;
+
+    modal.open(ProfileModal, {
+        mode: modalState.value,
+        profil: createProfilCompetences(id),
+        onUpdate: (newMode: ProfilModalMode) => {
+            console.log("Mode mis à jour :", newMode);
+            modalState.value = newMode;
+        },
+        onClose() {
+            console.log("Fermeture du modal");
+            modal.close();
+        },
+    });
 };
 </script>
