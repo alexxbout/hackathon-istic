@@ -1,0 +1,41 @@
+databaseChangeLog:
+- changeSet:
+    id: 1740059031521-5
+    author: Busea (generated)
+    changes:
+    - dropColumn:
+        columnName: cvUrl
+        tableName: profil
+- changeSet:
+    id: 1740059031521-1
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_debut
+        newDataType: timestamp
+        tableName: projet
+- changeSet:
+    id: 1740059031521-2
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_debut
+        newDataType: timestamp
+        tableName: reservation
+- changeSet:
+    id: 1740059031521-3
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_fin
+        newDataType: timestamp
+        tableName: projet
+- changeSet:
+    id: 1740059031521-4
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_fin
+        newDataType: timestamp
+        tableName: reservation
+
