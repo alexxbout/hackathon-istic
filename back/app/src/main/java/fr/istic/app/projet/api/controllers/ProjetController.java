@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/projets", produces = "application/json", consumes = "application/json")
+@RequestMapping(path = "/projets")
 @RequiredArgsConstructor
 @Tag(name = "Projets", description = "Operations about projets")
 public class ProjetController {
@@ -26,9 +26,9 @@ public class ProjetController {
     private final GetProjetsByUserMailUseCase getProjetsByUserMailUseCase;
     private final ProjetDtoMapper projetDtoMapper;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @Operation(summary = "Get all projets; if userMail is provided, get projets by userMail")
-    public ResponseEntity<List<ProjetDto>> getProjets(@PathVariable(required = false) String userMail) {
+    public ResponseEntity<List<ProjetDto>> getProjets(@RequestParam(required = false) String userMail) {
 
         List<Projet> projets;
         if (userMail == null) {
@@ -42,7 +42,7 @@ public class ProjetController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a projet")
     public ResponseEntity<ProjetDto> createProjet(@RequestBody CreateProjectUseCase.CreateProjetDto projetDto) {
 

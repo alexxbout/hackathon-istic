@@ -2,11 +2,7 @@ package fr.istic.app.siteAddr.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 
 @Entity(name = "site_addr")
@@ -14,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 public class SiteAddr {
 
     @Id

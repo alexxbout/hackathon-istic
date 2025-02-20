@@ -4,11 +4,7 @@ import fr.istic.app.matchPoolCompetence.domain.model.MatchPoolCompetence;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.util.List;
 
@@ -18,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 public class Pool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

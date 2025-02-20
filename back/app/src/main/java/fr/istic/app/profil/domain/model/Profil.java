@@ -4,13 +4,8 @@ import fr.istic.app.matchProfilCompetence.domain.model.MatchProfilCompetence;
 import fr.istic.app.siteAddr.domain.model.SiteAddr;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 public class Profil {
 
     @Id

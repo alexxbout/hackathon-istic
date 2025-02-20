@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/pools", produces = "application/json", consumes = "application/json")
+@RequestMapping("/pools")
 @RequiredArgsConstructor
 @Tag(name = "Pools", description = "Operations about pools")
 public class PoolController {
@@ -28,9 +28,9 @@ public class PoolController {
 
     private final PoolDtoMapper poolDtoMapper;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @Operation(summary = "Get all pools; if userMail is provided, get pools by userMail")
-    public ResponseEntity<List<PoolDto>> getPools(@PathVariable(required = false) String userMail) {
+    public ResponseEntity<List<PoolDto>> getPools(@RequestParam(required = false) String userMail) {
 
         List<Pool> pools;
         if (userMail == null) {
@@ -44,7 +44,7 @@ public class PoolController {
         return ResponseEntity.ok(mapped);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = "application/json")
     @Operation(summary = "Get a pool by id")
     public ResponseEntity<PoolDto> getPool(@PathVariable Long id) {
 
@@ -54,7 +54,7 @@ public class PoolController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a pool")
     public ResponseEntity<PoolDto> createPool(@RequestBody CreatePoolUseCase.CreatePoolUseCaseDto poolDto) {
 
@@ -64,7 +64,7 @@ public class PoolController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     @Operation(summary = "Update a pool by id")
     public ResponseEntity<PoolDto> updatePool(@PathVariable Long id, @RequestBody UpdatePoolUseCase.UpdatePoolUseCaseDto poolDto) {
 
@@ -76,7 +76,7 @@ public class PoolController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a pool by id")
-    public ResponseEntity<PoolDto> deletePool(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePool(@PathVariable Long id) {
 
         this.deletePoolUseCase.delete(id);
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/profils", produces = "application/json", consumes = "application/json")
+@RequestMapping("/profils")
 @RequiredArgsConstructor
 @Tag(name = "Profils", description = "Operations about profil")
 public class ProfilController {
@@ -24,7 +24,7 @@ public class ProfilController {
     private final DeleteProfilUseCase deleteProfilUseCase;
     private final ProfilDtoMapper profilDtoMapper;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @Operation(summary = "Get all profils")
     public ResponseEntity<List<ProfilDto>> getProfils() {
 
@@ -34,7 +34,7 @@ public class ProfilController {
         return ResponseEntity.ok(mapped);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = "application/json")
     @Operation(summary = "Get a profil by id")
     public ResponseEntity<ProfilDto> getProfil(@PathVariable Long id) {
 
@@ -44,7 +44,7 @@ public class ProfilController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a profil")
     public ResponseEntity<ProfilDto> createProfil(@RequestBody CreateProfilDtoUseCase.CreateProfilDto dto) {
 
@@ -54,7 +54,7 @@ public class ProfilController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     @Operation(summary = "Update a profil by id")
     public ResponseEntity<ProfilDto> updateProfil(@PathVariable Long id, @RequestBody UpdateProfilUseCase.UpdateProfilUseCaseDto profilDto) {
         var updated = this.updateProfilDtoUseCase.update(id, profilDto);
@@ -64,16 +64,16 @@ public class ProfilController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a profil by id")
-    public ResponseEntity<ProfilDto> deleteProfil(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProfil(@PathVariable Long id) {
 
         this.deleteProfilUseCase.delete(id);
         return ResponseEntity.ok().build();
     }
 
 
-    @GetMapping("/search")
+    @GetMapping(path = "/search", produces = "application/json")
     @Operation(summary = "Search a profil by competence, experience, date_debut, date_fin")
-    public ResponseEntity<List<ProfilDto>> searchProfil(@PathVariable List<Long> competence, @PathVariable Integer experience, @PathVariable String date_debut, @PathVariable String date_fin) {
+    public ResponseEntity<List<ProfilDto>> searchProfil(@RequestParam List<Long> competence, @RequestParam Integer experience, @RequestParam String date_debut, @RequestParam String date_fin) {
         //TODO
         return ResponseEntity.status(204).build();
     }

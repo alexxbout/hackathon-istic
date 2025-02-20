@@ -4,11 +4,7 @@ import fr.istic.app.reservation.domain.model.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@SuperBuilder
+@Builder(toBuilder = true)
 public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

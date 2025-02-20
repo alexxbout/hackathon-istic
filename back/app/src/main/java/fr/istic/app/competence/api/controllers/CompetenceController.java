@@ -7,8 +7,6 @@ import fr.istic.app.competence.domain.usecases.DeleteCompetenceUseCase;
 import fr.istic.app.competence.domain.usecases.ListCompetenceUseCase;
 import fr.istic.app.rest.documentation.ApiResponseDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/competences", produces = "application/json", consumes = "application/json")
+@RequestMapping("/competences")
 @RequiredArgsConstructor
 @Tag(name = "Competences", description = "Operations about competences")
 @ApiResponseDocumentation
@@ -28,7 +26,7 @@ public class CompetenceController {
     private final CreateCompetenceUseCase createCompetenceUseCase;
     private final DeleteCompetenceUseCase deleteCompetenceUseCase;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @Operation(summary = "Get all competences")
     @ApiResponseDocumentation
     public ResponseEntity<List<CompetenceDto>> getCompetences() {
@@ -38,7 +36,7 @@ public class CompetenceController {
     }
 
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a competence")
     @ApiResponseDocumentation
     public ResponseEntity<CompetenceDto> createCompetence(@RequestBody CreateCompetenceUseCase.CreateCompetenceDto competenceDto) {

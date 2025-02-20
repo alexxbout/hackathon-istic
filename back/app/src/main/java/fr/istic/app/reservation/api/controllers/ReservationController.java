@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/reservations", produces = "application/json", consumes = "application/json")
+@RequestMapping(path = "/reservations")
 @RequiredArgsConstructor
 @Tag(name = "Reservations", description = "Operations about reservations")
 public class ReservationController {
@@ -27,9 +27,9 @@ public class ReservationController {
     private final DeleteReservationByIdUseCase deleteReservationByIdUseCase;
     private final ReservationDtoMapper reservationDtoMapper;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     @Operation(summary = "Get all reservations; if profilId is provided, get projets by profilId")
-    public ResponseEntity<List<ReservationDto>> getReservations(@PathVariable(required = false) Long profilId) {
+    public ResponseEntity<List<ReservationDto>> getReservations(@RequestParam(required = false) Long profilId) {
 
         List<Reservation> reservations;
         if (profilId == null) {
@@ -43,7 +43,7 @@ public class ReservationController {
         return ResponseEntity.ok(mapped);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = "application/json")
     @Operation(summary = "Get a reservation by id")
     public ResponseEntity<ReservationDto> getReservation(@PathVariable Long id) {
         var found = this.getReservationByIdUseCase.getReservationById(id);
@@ -51,7 +51,7 @@ public class ReservationController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a reservation")
     public ResponseEntity<ReservationDto> createReservation(@RequestBody CreateReservationUseCase.CreateReservationUseCaseDto reservationDto) {
         var createdReservation = createReservationUseCase.create(reservationDto);
@@ -59,7 +59,7 @@ public class ReservationController {
         return ResponseEntity.ok(mapped);
     }
 
-    @PostMapping("/list")
+    @PostMapping(path = "/list", consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a list of reservations")
     public ResponseEntity<List<ReservationDto>> createReservations(@RequestBody List<CreateReservationUseCase.CreateReservationUseCaseDto> reservationsDto) {
         var createdReservations = createReservationsUseCase.create(reservationsDto);
@@ -69,7 +69,7 @@ public class ReservationController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a reservation by id")
-    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
         this.deleteReservationByIdUseCase.deleteReservationById(id);
         return ResponseEntity.ok().build();
     }
