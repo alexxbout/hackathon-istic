@@ -1,5 +1,5 @@
 <template>
-    <div class="border border-black rounded-2xl flex items-center justify-center w-full h-max p-3 gap-x-2.5">
+    <div class="border-2 border-black rounded-xl flex items-center justify-center w-full h-max p-3 gap-x-2.5">
         <USelectMenu @change="handleSkillsUpdate" class="w-full" variant="outline" color="gray" size="md" v-model="selectedSkills" :options="skillOptions" :placeholder="selectSkillPlaceholder" searchable :searchable-placeholder="skillSearchText" multiple>
             <template #label>
                 <span v-if="selectedSkills.length" class="truncate">{{ selectedSkillLabels }}</span>
@@ -13,7 +13,7 @@
 
         <USelect @change="handleExperienceUpdate" class="w-full" variant="outline" color="gray" size="md" v-model="selectedExperience" :options="experiencesOptions" :placeholder="experiencePlaceholder" />
 
-        <div v-if="props.role != 'rh'" class="w-full">
+        <div v-if="props.role != 'rh'" ref="datePickerElement" class="w-full">
             <UPopover class="w-full" :popper="{ placement: 'bottom-start' }">
                 <UButton size="md" icon="i-heroicons-calendar-days-20-solid"> {{ format(selectedPeriod.start, "d MMM, yyy") }} - {{ format(selectedPeriod.end, "d MMM, yyy") }}</UButton>
 
@@ -41,6 +41,8 @@ const props = defineProps<{
     experienceOptions: { value: number; label: string }[];
     skillOptions: { value: number; label: string }[];
 }>();
+
+const datePickerElement = ref<HTMLElement>();
 
 const skillOptions = ref<{ value: number; label: string }[]>(props.skillOptions);
 
@@ -116,6 +118,14 @@ const handlePeriodUpdate = (period: { start: Date; end: Date | number }) => {
     selectedPeriod.value = period;
     emits("updatePeriod", period);
 };
+
+onMounted(() => {
+    // Fix the width of the date picker button
+    const button = datePickerElement.value?.querySelector("button");
+    if (button) {
+        button.classList.add("w-full");
+    }
+})
 
 defineExpose({ clearFilters });
 </script>
