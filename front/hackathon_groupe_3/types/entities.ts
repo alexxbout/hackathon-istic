@@ -1,10 +1,10 @@
 export interface SiteAddr {
-    id: number;
+    id?: number;
     ville: string;
 }
 
 export interface Profil {
-    id: number;
+    id?: number;
     nom: string;
     prenom: string;
     experience: number;
@@ -20,32 +20,32 @@ export interface ProfilCompetences {
 }
 
 export interface Projet {
-    id: number;
+    id?: number;
     nom: string;
     date_debut: Date;
     date_fin: Date;
 }
 
 export interface Pool {
-    id: number;
+    id?: number;
     user_id: number;
     nom: string;
     experience: number;
 }
 
 export interface User {
-    id: number;
+    id?: number;
     role_id: number;
     nom: string;
 }
 
 export interface Role {
-    id: number;
+    id?: number;
     nom: string;
 }
 
 export interface Competence {
-    id: number;
+    id?: number;
     nom: string;
 }
 
@@ -60,7 +60,7 @@ export interface MatchPoolCompetence {
 }
 
 export interface Reservation {
-    id: number;
+    id?: number;
     profil_id: number;
     date_debut: Date;
     date_fin: Date;
