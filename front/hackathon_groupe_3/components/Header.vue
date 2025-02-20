@@ -13,18 +13,36 @@
                 {{ link.label }}
             </ULink>
         </div>
+        <div class="flex items-center gap-x-4">
+            <UButton size="xl" color="black" variant="outline" :ui="{ rounded: 'rounded-full' }" disabled class="cursor-not-allowed opacity-60">
+                {{ role === "rh" ? "RH" : "Chef de projet" }}
+            </UButton>
+            <UPopover>
+                <UButton size="md" color="black" variant="solid" class="flex justify-center items-center gap-x-2">
+                    <span>Marion Durant</span>
+                    <UAvatar alt="Photo de profil" size="sm" class="w-8 h-8" />
+                </UButton>
+                <template #panel>
+                    <div class="bg-white p-2 flex flex-col gap-y-2">
+                        <UButton color="gray" variant="soft" class="flex items-center gap-x-2 rounded-md hover:bg-gray-100">
+                            <ULink to="/login" class="flex items-center gap-x-2 rounded-md text-red-600 hover:text-red-800">
+                                <UIcon name="heroicons:arrow-left-end-on-rectangle-solid" class="w-5 h-5" />
+                                <span class="font-semibold">Déconnexion</span>
+                            </ULink>
+                        </UButton>
 
-        <!-- Conteneur du bouton avec un petit espace de marge sur la droite -->
-        <UButton size="md" color="black" variant="solid" class="flex justify-center items-center gap-x-2">
-            <!-- Avatar inséré ici -->
-            <span>Marion Durant</span>
-            <UAvatar alt="Photo de profile" size="sm" class="w-8 h-8" />
-        </UButton>
+                        <!--Change color mode-->
+                        <UButton :label="isDark ? 'Dark' : 'Light'" :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'" color="gray" variant="soft" class="flex items-center gap-x-2 rounded-md hover:bg-gray-100" @click="isDark = !isDark" />
+                    </div>
+                </template>
+            </UPopover>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import type { Role } from "../types/roles";
 
 const links: { label: string; icon: string; to: string }[] = [
     { label: "Profils", icon: "lucide:users", to: "/profils" },
@@ -32,10 +50,21 @@ const links: { label: string; icon: string; to: string }[] = [
     { label: "Projects", icon: "tabler:clipboard-list", to: "/projects" },
 ];
 
+const role = ref<Role>("rh");
+
 const route = useRoute();
 const currentRoute = ref(route.name);
 
 watchEffect(() => {
     currentRoute.value = route.path;
+});
+const colorMode = useColorMode();
+const isDark = computed({
+    get() {
+        return colorMode.value === "dark";
+    },
+    set() {
+        colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
+    },
 });
 </script>

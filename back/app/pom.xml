@@ -80,12 +80,7 @@
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<configuration>
-					<driver>org.postgresql.Driver</driver>
-					<url>jdbc:postgresql://localhost:5432/app_db</url>
-					<username>postgres</username>
-					<password>postgres</password>
-					<changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-					<outputChangeLogFile>src/main/resources/db/changelog/liquibase_outputChangeLog.yaml</outputChangeLogFile>
+					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
 				</configuration>
 			</plugin>
 			<plugin>
