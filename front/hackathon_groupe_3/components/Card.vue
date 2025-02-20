@@ -23,7 +23,7 @@
         </div>
 
         <!-- Bouton en bas -->
-        <UButton color="black" variant="outline" class="mt-6 w-full text-center flex justify-center items-center"> Afficher les détails </UButton>
+        <UButton @click.stop="handleShowDetails" color="black" variant="outline" class="mt-6 w-full text-center flex justify-center items-center">Afficher les détails</UButton>
     </UCard>
 </template>
 
@@ -32,6 +32,7 @@ import { ref } from "vue";
 import type { Role } from "../types/roles";
 
 const props = defineProps<{
+    id: number;
     photo: string;
     nom: string;
     prenom: string;
@@ -58,5 +59,13 @@ const getExperienceLabel = (experience: number) => {
     if (experience > 5) return "Sénior";
     else if (experience >= 3) return "Confirmé";
     return "Junior";
+};
+
+const emits = defineEmits<{
+    (event: "@click", id: number): void;
+}>();
+
+const handleShowDetails = () => {
+    emits("@click", props.id);
 };
 </script>
