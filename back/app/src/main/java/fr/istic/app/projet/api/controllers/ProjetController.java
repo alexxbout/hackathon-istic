@@ -28,7 +28,7 @@ public class ProjetController {
 
     @GetMapping
     @Operation(summary = "Get all projets; if userMail is provided, get projets by userMail")
-    public ResponseEntity<List<ProjetDto>> getProjets(@RequestParam String userMail) {
+    public ResponseEntity<List<ProjetDto>> getProjets(@RequestParam(required = false) String userMail) {
 
         List<Projet> projets;
         if (userMail == null) {

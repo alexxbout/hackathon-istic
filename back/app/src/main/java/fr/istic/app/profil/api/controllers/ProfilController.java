@@ -74,7 +74,7 @@ public class ProfilController {
     @GetMapping("/search")
     @Operation(summary = "Search a profil by competence, experience, date_debut, date_fin")
     public ResponseEntity<List<ProfilDto>> searchProfil(@RequestParam List<Long> competence, @RequestParam Integer experience, @RequestParam String date_debut, @RequestParam String date_fin) {
-
+        //TODO
         return ResponseEntity.status(204).build();
     }
 
