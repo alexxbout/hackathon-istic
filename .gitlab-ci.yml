@@ -1,0 +1,139 @@
+image: "ubuntu:latest"
+stages:
+  - build
+  - db
+  - deploy
+
+variables:
+  DOCKER_IMAGE_NAME: "hackathon2025/skillstasks_repo"
+  DOCKER_HUB_ID: hackathon2025
+  DOCKER_HUB_PASSWORD: M=AH*+fEK5gDc,q
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - name: docker:dind
+    alias: docker
+
+build_back_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for backend"
+    - cd back/app/
+    - docker build -t ${DOCKER_IMAGE_NAME}-back:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-back:latest ${DOCKER_IMAGE_NAME}-back:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-back:latest
+    - docker push ${DOCKER_IMAGE_NAME}-back:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - back/app/**/*
+
+build_auth_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for authentication service"
+    - cd back/auth/
+    - docker build -t ${DOCKER_IMAGE_NAME}-auth:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-auth:latest ${DOCKER_IMAGE_NAME}-auth:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-auth:latest
+    - docker push ${DOCKER_IMAGE_NAME}-auth:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - back/auth/**/*
+
+
+build_front_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for front service"
+    - cd front/hackathon_groupe_3
+    - docker build -t ${DOCKER_IMAGE_NAME}-front:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-front:latest ${DOCKER_IMAGE_NAME}-front:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-front:latest
+    - docker push ${DOCKER_IMAGE_NAME}-front:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - front/**/*
+
+
+liquibase_update:
+  stage: db
+  image: liquibase/liquibase
+  script:
+    # Puis on lance Liquibase en utilisant ce fichier
+    - liquibase update --driver=org.postgresql.Driver --url="jdbc:postgresql://148.60.11.35:5432/postgres" --changeLogFile=src/main/resources/db/changelog/db.changelog-master-for-pipeline.yaml --username=postgres --password=azerty123
+  only:
+    changes:
+      - src/main/resources/db/changelog/**/*
+
+deploy_auth:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deployment_auth.yml -i ansible/hosts
+  only:
+    changes:
+      - back/auth/**/*
+
+
+deploy_back:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deployment_back.yml -i ansible/hosts
+  only:
+    changes:
+      - back/app/**/*
+
+deploy_front:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deploiement_front.yml -i ansible/hosts
+  only:
+    changes:
+      - front/**/*
+  
+
