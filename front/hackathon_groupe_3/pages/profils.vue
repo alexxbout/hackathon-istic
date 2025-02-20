@@ -19,7 +19,7 @@
             <SearchBar ref="searchBarElement" :role="role" :experienceOptions="experienceOptions" :skillOptions="skillOptions" @updateSkills="updateSkills" @updateExperience="updateExperience" @updatePeriod="updatePeriod" />
 
             <div v-if="hotreload" class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
-                <Card v-for="customProfil in paginatedCustomProfils" @@click="handleShowDetails(customProfil.profil.id)" @click="toggleSelection(customProfil.profil.id)" :key="customProfil.profil.id" :id="customProfil.profil.id" :photo="customProfil.profil.profile_picture" :nom="customProfil.profil.nom" :prenom="customProfil.profil.prenom" :role="role" :experience="customProfil.profil.experience" :isChecked="selectedProfiles.has(customProfil.profil.id)" />
+                <Card v-for="customProfil in paginatedCustomProfils" @@click="handleShowDetails(customProfil.profil.id!)" @click="toggleSelection(customProfil.profil.id!)" :key="customProfil.profil.id" :id="customProfil.profil.id!" :photo="customProfil.profil.profile_picture" :nom="customProfil.profil.nom" :prenom="customProfil.profil.prenom" :role="role" :experience="customProfil.profil.experience" :isChecked="selectedProfiles.has(customProfil.profil.id!)" />
             </div>
 
             <UPagination v-show="filteredCustomProfils.length > 6" v-model="page" size="xl" :total="filteredCustomProfils.length" :page-count="6" />
@@ -48,7 +48,7 @@ const page = ref(1);
 const itemsPerPage = 6;
 const selectedProfiles = ref(new Set<number>());
 const hotreload = ref(true);
-const modalState = ref();
+const modalState = ref<ProfilModalMode>();
 
 // États des filtres
 const selectedSkills = ref<number[]>([]);

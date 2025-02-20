@@ -92,7 +92,9 @@ const emits = defineEmits<{
     (e: "update", newMode: ProfilModalMode): void;
 }>();
 
-const mode = defineModel<ProfilModalMode>("mode");
+const mode = defineModel<ProfilModalMode>({
+    default: ProfilModalMode.INFO,
+});
 
 const toast = useToast();
 

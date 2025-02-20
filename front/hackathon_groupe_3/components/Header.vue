@@ -47,7 +47,7 @@ import type { Role } from "../types/roles";
 const links: { label: string; icon: string; to: string }[] = [
     { label: "Profils", icon: "lucide:users", to: "/profils" },
     { label: "Pools", icon: "material-symbols:filter-alt-outline", to: "/pools" },
-    { label: "Projects", icon: "tabler:clipboard-list", to: "/projects" },
+    { label: "Projets", icon: "tabler:clipboard-list", to: "/projets" },
 ];
 
 const role = ref<Role>("rh");
