@@ -1,6 +1,6 @@
 <template>
     <UModal v-model="isOpen" @close="closeModal" :ui="{ overlay: { background: 'bg-gray-400/20 backdrop-blur-md' }, width: '' }">
-        <UCard class="max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <UCard class="max-w-[90vw]" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <!-- Header -->
             <template #header>
                 <div class="h-25">
