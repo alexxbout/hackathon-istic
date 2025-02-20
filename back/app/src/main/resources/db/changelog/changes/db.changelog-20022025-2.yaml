@@ -1,0 +1,48 @@
+databaseChangeLog:
+- changeSet:
+    id: 1740074407635-5
+    author: Busea (generated)
+    changes:
+    - dropColumn:
+        columnName: id
+        tableName: match_pool_competence
+- changeSet:
+    id: 1740074407635-6
+    author: Busea (generated)
+    changes:
+    - dropColumn:
+        columnName: id
+        tableName: match_profil_competence
+- changeSet:
+    id: 1740074407635-1
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_debut
+        newDataType: timestamp
+        tableName: projet
+- changeSet:
+    id: 1740074407635-2
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_debut
+        newDataType: timestamp
+        tableName: reservation
+- changeSet:
+    id: 1740074407635-3
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_fin
+        newDataType: timestamp
+        tableName: projet
+- changeSet:
+    id: 1740074407635-4
+    author: Busea (generated)
+    changes:
+    - modifyDataType:
+        columnName: date_fin
+        newDataType: timestamp
+        tableName: reservation
+
