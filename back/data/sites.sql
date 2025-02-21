@@ -1,0 +1,15 @@
+INSERT INTO site_addr (id, ville) VALUES (1, 'Montpellier');
+INSERT INTO site_addr (id, ville) VALUES (2, 'Bordeaux');
+INSERT INTO site_addr (id, ville) VALUES (3, 'Strasbourg');
+INSERT INTO site_addr (id, ville) VALUES (4, 'Rennes');
+INSERT INTO site_addr (id, ville) VALUES (5, 'Monaco');
+INSERT INTO site_addr (id, ville) VALUES (6, 'Valence');
+INSERT INTO site_addr (id, ville) VALUES (7, 'Toulouse');
+INSERT INTO site_addr (id, ville) VALUES (8, 'Paris');
+INSERT INTO site_addr (id, ville) VALUES (9, 'Nantes');
+INSERT INTO site_addr (id, ville) VALUES (10, 'Nice');
+INSERT INTO site_addr (id, ville) VALUES (11, 'Nime');
+INSERT INTO site_addr (id, ville) VALUES (12, 'Metz');
+INSERT INTO site_addr (id, ville) VALUES (13, 'Tour');
+INSERT INTO site_addr (id, ville) VALUES (14, 'Lille');
+INSERT INTO site_addr (id, ville) VALUES (15, 'Marseille');

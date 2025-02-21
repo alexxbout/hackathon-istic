@@ -1,0 +1,10 @@
+INSERT INTO user (id, role_id, nom) VALUES (1, 2, 'User_1');
+INSERT INTO user (id, role_id, nom) VALUES (2, 2, 'User_2');
+INSERT INTO user (id, role_id, nom) VALUES (3, 2, 'User_3');
+INSERT INTO user (id, role_id, nom) VALUES (4, 2, 'User_4');
+INSERT INTO user (id, role_id, nom) VALUES (5, 2, 'User_5');
+INSERT INTO user (id, role_id, nom) VALUES (6, 2, 'User_6');
+INSERT INTO user (id, role_id, nom) VALUES (7, 1, 'User_7');
+INSERT INTO user (id, role_id, nom) VALUES (8, 1, 'User_8');
+INSERT INTO user (id, role_id, nom) VALUES (9, 1, 'User_9');
+INSERT INTO user (id, role_id, nom) VALUES (10, 2, 'User_10');
