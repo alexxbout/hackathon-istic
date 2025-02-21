@@ -131,6 +131,7 @@ deploy_auth:
   before_script:
     - apt-get update && apt-get install -y ansible sshpass
   script:
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
     - echo "Deploying authentification..."
     - ansible-playbook ansible/playbooks/deploiement_auth.yml -i ansible/hosts
   only:
