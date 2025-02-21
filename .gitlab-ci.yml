@@ -16,6 +16,13 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
+  DB_HOST: "148.60.11.35"
+  DB_PORT: "5432"
+  DB_NAME: "postgres"
+  DB_USER: "postgres"
+  DB_PASSWORD: "azerty123"
+  DUMP_FILE: "backup_$(date +%Y-%m-%d_%H-%M-%S).sql"  # Use .sql extension for SQL format dump
+  ONEDRIVE_REMOTE: "onedrive:dumps"
 
 services:
   - name: docker:dind
