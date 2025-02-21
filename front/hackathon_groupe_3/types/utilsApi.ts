@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Competence, Pool, Profil, Projet, Reservation } from "./entities";
+import {use} from "h3";
 
 export class APIUtils {
     private static baseUrl = "/api/v1";
@@ -82,5 +83,17 @@ export class APIUtils {
 
     static async deleteCompetence(id: number) {
         return axios.delete(`${this.baseUrl}/competences/${id}`);
+    }
+
+    static async getUsers() {
+        return axios.get(`${this.baseUrl}/users`);
+    }
+
+    static async addUser(user: User) {
+        return axios.post(`${this.baseUrl}/users`, user);
+    }
+
+    static async deleteUser(id: number) {
+        return axios.delete(`${this.baseUrl}/users/${id}`);
     }
 }

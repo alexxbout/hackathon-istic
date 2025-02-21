@@ -8,14 +8,17 @@
 
         <!-- Conteneur des liens -->
         <div class="flex items-center justify-center gap-x-10">
-            <ULink v-for="link in links" :key="link.to" :to="link.to" as="button" class="flex justify-center items-center gap-x-2" :class="currentRoute != link.to ? 'opacity-40' : ''">
+            <ULink v-for="link in filteredLinks" :key="link.to" :to="link.to" as="button" class="flex justify-center items-center gap-x-2" :class="currentRoute !== link.to ? 'opacity-40' : ''">
                 <UIcon :name="link.icon" class="w-5 h-5 align-middle" />
                 {{ link.label }}
             </ULink>
         </div>
+
+        <!-- Conteneur des boutons utilisateur -->
         <div class="flex items-center gap-x-4">
-            <UButton size="xl" color="black" variant="outline" :ui="{ rounded: 'rounded-full' }" disabled class="cursor-not-allowed opacity-60">
-                {{ role === "rh" ? "RH" : "Chef de projet" }}
+            <UButton size="xl" :color="roleConfig.color" variant="ghost" :ui="{ rounded: 'rounded-full' }" disabled class="cursor-not-allowed opacity-60 flex items-center gap-x-2">
+                <UIcon :name="roleConfig.icon" class="w-5 h-5" />
+                {{ roleConfig.label }}
             </UButton>
             <UPopover>
                 <UButton size="md" color="black" variant="solid" class="flex justify-center items-center gap-x-2">
@@ -41,16 +44,25 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import type { Role } from "../types/roles";
+import { RoleConfig } from "../types/roles";
 
-const links: { label: string; icon: string; to: string }[] = [
-    { label: "Profils", icon: "lucide:users", to: "/profils" },
-    { label: "Pools", icon: "material-symbols:filter-alt-outline", to: "/pools" },
-    { label: "Projets", icon: "tabler:clipboard-list", to: "/projets" },
+const allLinks = [
+    { label: "Accueil", icon: "material-symbols:home", to: "/accueil", roles: ["admin"] },
+    { label: "Profils", icon: "lucide:users", to: "/profils", roles: ["rh", "cdp"] },
+    { label: "Pools", icon: "material-symbols:filter-alt-outline", to: "/pools", roles: ["cdp", "admin"] },
+    { label: "Projects", icon: "tabler:clipboard-list", to: "/projects", roles: ["cdp", "admin"] },
 ];
 
-const role = ref<Role>("rh");
+const role = ref<Role>("cdp");
+
+const roleConfig = computed(() => RoleConfig[role.value]);
+
+const filteredLinks = computed(() => {
+    return allLinks.filter((link) => link.roles.includes(role.value));
+});
 
 const route = useRoute();
 const currentRoute = ref(route.name);
