@@ -11,7 +11,9 @@
           <UButton v-if="role != 'cdp'" color="gray" icon="lucide:user-plus" variant="soft"
                    @click="handleCreateProfile">{{ createProfileButton }}
           </UButton>
-          <UButton v-if="role != 'rh'" color="green" icon="lucide:mouse-pointer-click" variant="soft"
+          <UButton v-if="role != 'rh'" :disabled="!selectedProfiles.size " color="green"
+                   icon="lucide:mouse-pointer-click" trailing-icon=""
+                   variant="soft"
                    @click="handleAddProfiles">{{ addSelectionToProject }}
           </UButton>
           <UButton color="red" icon="lucide:circle-x" variant="soft" @click="handleClearFilters">{{
@@ -28,9 +30,13 @@
       <SearchBar ref="searchBarElement" :experienceOptions="experienceOptions" :role="role" :skillOptions="skillOptions"
                  @updateExperience="updateExperience" @updatePeriod="updatePeriod" @updateSkills="updateSkills"/>
 
-            <div v-if="hotreload" class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
-                <Card v-for="profil in paginatedCustomProfils" @@click="handleShowDetails(profil.id!)" @click="toggleSelection(profil.id!)" :key="profil.id" :id="profil.id!" :photo="profil.profile_picture" :nom="profil.nom" :prenom="profil.prenom" :role="role" :experience="profil.experience" :isChecked="selectedProfiles.has(profil.id!)" />
-            </div>
+      <div v-if="hotreload" class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
+        <Card v-for="profil in paginatedCustomProfils" :id="profil.id!"
+              :key="profil.id" :experience="profil.experience" :isChecked="selectedProfiles.has(profil.id!)"
+              :nom="profil.nom"
+              :photo="profil.profile_picture" :prenom="profil.prenom" :role="role" @click="toggleSelection(profil.id!)"
+              @@click="handleShowDetails(profil.id!)"/>
+      </div>
 
       <UPagination v-show="filteredCustomProfils.length > 6" v-model="page" :page-count="6"
                    :total="filteredCustomProfils.length" size="xl"/>
@@ -39,16 +45,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref } from "vue";
+import {computed, nextTick, ref} from "vue";
 import AddProfillProjectModal from "~/components/modals/AddProfillProjectModal.vue";
 import ProfileModal from "~/components/modals/ProfileModal.vue";
 import type SearchBar from "~/components/SearchBar.vue";
-import type { Competence, Profil, ProfilCompetences } from "~/types/entities";
-import { ProfilModalMode } from "~/types/modals";
-import type { TypeRole } from "~/types/roles";
+import type {Competence, Profil, ProfilCompetences} from "~/types/entities";
+import {ProfilModalMode} from "~/types/modals";
+import type {TypeRole} from "~/types/roles";
 
 definePageMeta({
-    middleware: "auth",
+  middleware: "auth",
 });
 
 interface CustomProfil {
@@ -82,23 +88,26 @@ const deselectAll = ref<string>("Tout désélectionner");
 
 // Données des profils (exemple)
 const profils: Profil[] = [
-    {
-        id: 1,
-        nom: "Doe",
-        prenom: "John",
-        experience: 5,
-        cvUrl: "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf",
-        profile_picture: "https://i.pravatar.cc/300",
-        ville: "Paris",
-        competences: [
-            { id: 1, nom: "JavaScript" },
-            { id: 2, nom: "TypeScript" },
-        ],
-    },
+  {
+    id: 1,
+    nom: "Doe",
+    prenom: "John",
+    experience: 5,
+    cvUrl: "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf",
+    profile_picture: "https://i.pravatar.cc/300",
+    ville: "Paris",
+    competences: [
+      {id: 1, nom: "JavaScript"},
+      {id: 2, nom: "TypeScript"},
+    ],
+  },
 ];
 
 // Options des filtres
-const experienceOptions = ref<{ value: number; label: string }[]>(profils.map((profil) => ({ value: profil.experience, label: `+${profil.experience} ans` })).sort((a, b) => a.value - b.value));
+const experienceOptions = ref<{ value: number; label: string }[]>(profils.map((profil) => ({
+  value: profil.experience,
+  label: `+${profil.experience} ans`
+})).sort((a, b) => a.value - b.value));
 const skillOptions = ref<{ value: number; label: string }[]>([
   {value: 1, label: "JavaScript"},
   {value: 2, label: "TypeScript"},
@@ -111,19 +120,19 @@ const skillOptions = ref<{ value: number; label: string }[]>([
 
 // Filtrage des profils
 const filteredCustomProfils = computed(() => {
-    return profils.filter((profil) => {
-        // Filtrer par expérience
-        if (selectedExperience.value !== null && profil.experience < selectedExperience.value) {
-            return false;
-        }
+  return profils.filter((profil) => {
+    // Filtrer par expérience
+    if (selectedExperience.value !== null && profil.experience < selectedExperience.value) {
+      return false;
+    }
 
-        // Filtrer par compétences (toutes les compétences sélectionnées doivent être présentes)
-        if (selectedSkills.value.length > 0) {
-            const profilSkillIds = profil.competences.map((comp) => comp.id);
-            if (!selectedSkills.value.every((skillId) => profilSkillIds.includes(skillId))) {
-                return false;
-            }
-        }
+    // Filtrer par compétences (toutes les compétences sélectionnées doivent être présentes)
+    if (selectedSkills.value.length > 0) {
+      const profilSkillIds = profil.competences.map((comp) => comp.id);
+      if (!selectedSkills.value.every((skillId) => profilSkillIds.includes(skillId))) {
+        return false;
+      }
+    }
 
     return true;
   });
@@ -181,19 +190,19 @@ const handleUnselectAll = async () => {
 };
 
 const handleAddProfiles = () => {
-    console.log("Ajout des profils sélectionnés à un projet...");
+  console.log("Ajout des profils sélectionnés à un projet...");
 
-    modal.open(AddProfillProjectModal, {
-        profiles: profils, // TODO Fix this
-        onAssign: () => {
-            console.log("Assignation des profils à un projet...");
-            modal.close();
-        },
-        onClose() {
-            console.log("Fermeture du modal");
-            modal.close();
-        },
-    });
+  modal.open(AddProfillProjectModal, {
+    profiles: profils, // TODO Fix this
+    onAssign: () => {
+      console.log("Assignation des profils à un projet...");
+      modal.close();
+    },
+    onClose() {
+      console.log("Fermeture du modal");
+      modal.close();
+    },
+  });
 };
 
 const handleCreateProfile = () => {
@@ -215,11 +224,11 @@ const handleCreateProfile = () => {
 };
 
 const createProfilCompetences = (profilId: number): ProfilCompetences => {
-    const profil = profils.find((profil) => profil.id === profilId)!;
-    return {
-        profil: profil,
-        competences: profils.find((profil) => profil.id === profilId)!.competences,
-    };
+  const profil = profils.find((profil) => profil.id === profilId)!;
+  return {
+    profil: profil,
+    competences: profils.find((profil) => profil.id === profilId)!.competences,
+  };
 };
 
 const handleShowDetails = (id: number) => {
