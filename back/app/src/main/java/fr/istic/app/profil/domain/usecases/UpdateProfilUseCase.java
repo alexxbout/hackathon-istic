@@ -34,7 +34,6 @@ public class UpdateProfilUseCase {
         profil.setNom(dto.nom);
         profil.setPrenom(dto.prenom);
         profil.setExperience(dto.experience);
-        profil.setCvUrl(dto.cvUrl);
         profil.setSiteAddr(siteAddr);
 
         var profilCompetenceIds = profil.getCompetences()
@@ -85,7 +84,6 @@ public class UpdateProfilUseCase {
             String nom,
             String prenom,
             Integer experience,
-            String cvUrl,
             List<Long> competenceIds,
             String ville
     ) {

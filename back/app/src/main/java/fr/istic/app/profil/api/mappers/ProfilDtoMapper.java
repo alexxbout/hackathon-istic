@@ -16,10 +16,12 @@ public interface ProfilDtoMapper {
 
     @Mapping(target = "siteAddr.ville", source = "ville")
     @Mapping(target = "competences", ignore = true)
+    @Mapping(target = "cv.id", source = "cv_id")
     Profil fromDto(ProfilDto profilDto);
 
     @Mapping(target = "competences", qualifiedByName = "competencesToDto")
     @Mapping(target = "ville", source = "siteAddr.ville")
+    @Mapping(target = "cv_id", source = "cv.id")
     ProfilDto toDto(Profil profil);
 
     List<Profil> fromDto(List<ProfilDto> profilDtos);

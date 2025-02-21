@@ -37,7 +37,6 @@ public class CreateProfilDtoUseCase {
                 .nom(dto.nom)
                 .prenom(dto.prenom)
                 .experience(dto.experience)
-                .cvUrl(dto.cvUrl)
                 .siteAddr(siteAddr)
                 .build();
 
@@ -68,7 +67,6 @@ public class CreateProfilDtoUseCase {
             String nom,
             String prenom,
             Integer experience,
-            String cvUrl,
             List<Long> competenceIds,
             String ville
     ) {

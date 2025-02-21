@@ -19,7 +19,7 @@ public class ProfilDto {
     private String prenom;
     private Integer experience;
     private List<CompetenceDto> competences;
-    private String cvUrl;
+    private Long cv_id;
     private String ville;
 
 

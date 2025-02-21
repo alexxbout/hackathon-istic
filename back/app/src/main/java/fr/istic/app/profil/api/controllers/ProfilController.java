@@ -6,10 +6,14 @@ import fr.istic.app.profil.domain.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/profils")
@@ -23,6 +27,8 @@ public class ProfilController {
     private final UpdateProfilUseCase updateProfilDtoUseCase;
     private final DeleteProfilUseCase deleteProfilUseCase;
     private final ProfilDtoMapper profilDtoMapper;
+    private final ReadCVUseCase readCVUseCase;
+    private final CreateCVUseCase createCVUseCase;
 
     @GetMapping(produces = "application/json")
     @Operation(summary = "Get all profils")
@@ -43,6 +49,26 @@ public class ProfilController {
 
         return ResponseEntity.ok(mapped);
     }
+
+    @GetMapping(path = "/{id}/cv", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Operation(summary = "Get a profil's cv by id")
+    public ResponseEntity<byte[]> getProfilCv(@PathVariable Long id) {
+        var cv = this.readCVUseCase.read(id);
+
+        return ResponseEntity.ok().body(cv.getFileData());
+    }
+
+    @PostMapping(path = "/{id}/cv", consumes = MediaType.APPLICATION_PDF_VALUE)
+    @Operation(summary = "Create a profil's cv by id")
+    public ResponseEntity<Map<String, Long>> createProfilCv(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+
+        var created = this.createCVUseCase.create(file, id);
+
+        Map<String, Long> response = Map.of("id", created.getId());
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @Operation(summary = "Create a profil")
