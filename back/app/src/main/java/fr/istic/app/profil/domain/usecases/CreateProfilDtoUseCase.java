@@ -31,7 +31,7 @@ public class CreateProfilDtoUseCase {
 
         var siteAddr = this.siteAddrRepository
                 .findByVille(dto.ville)
-                .orElse(this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)));
+                .orElseGet(() -> this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)));
 
         Profil profil = Profil.builder()
                 .nom(dto.nom)

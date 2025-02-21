@@ -2,6 +2,7 @@ package fr.istic.app.common.domain.exception.handler;
 
 import fr.istic.app.common.domain.exception.NotFoundException;
 import fr.istic.app.common.domain.exception.NotImplementedException;
+import fr.istic.app.common.domain.exception.ProfilExistsInReservationException;
 import fr.istic.app.common.domain.exception.ReservationOverlapException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +35,12 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ProfilExistsInReservationException.class)
+    public ResponseEntity<Map<String, String>> handleProfilExistsInReservationException(ProfilExistsInReservationException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
