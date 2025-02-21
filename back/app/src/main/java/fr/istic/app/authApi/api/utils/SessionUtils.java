@@ -15,10 +15,7 @@ public class SessionUtils {
         }
         return (String) request.getSession().getAttribute("USER_ROLE");
     }
-    public static boolean isAdmin(HttpServletRequest request) {
-        String role = (String) request.getSession().getAttribute("USER_ROLE");
-        return "admin".equalsIgnoreCase(role);
-    }
+
 
     public static UserInfoDto getInformationUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Don't create a new session
@@ -43,16 +40,4 @@ public class SessionUtils {
         return new UserInfoDto(nom,prenom,mail,image,firstLogin,role);
     }
 
-
-
-    public static boolean isCdp(HttpServletRequest request) {
-        String role = (String) request.getSession().getAttribute("USER_ROLE");
-        return  "cdp".equalsIgnoreCase(role);
-    }
-
-
-    public boolean isRH(HttpServletRequest request) {
-        String role = (String) request.getSession().getAttribute("USER_ROLE");
-        return  "rh".equalsIgnoreCase(role);
-    }
 }

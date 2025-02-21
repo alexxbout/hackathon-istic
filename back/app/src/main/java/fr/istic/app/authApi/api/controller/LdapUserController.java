@@ -7,9 +7,9 @@
     import fr.istic.app.authApi.api.dtos.UserInfoDto;
     import fr.istic.app.authApi.api.utils.SessionUtils;
     import jakarta.servlet.http.HttpServletRequest;
-    import jakarta.servlet.http.HttpServletResponse;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.access.prepost.PreAuthorize;
     import org.springframework.web.bind.annotation.*;
     
     import java.util.List;
@@ -29,12 +29,11 @@
     
         // Create User
         @PostMapping("/create")
+        @PreAuthorize("@authSecurityService.isLoggedIn(#request.getSession()) and @roleSecurityService.isAdmin(#request.getSession())")
         public ResponseEntity<?> createUser(@RequestBody UserDto userDto, HttpServletRequest request) {
-            if (SessionUtils.isAdmin(request)) {
-                return ldapUserService.createUser(userDto);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to create a user.");
-            }
+
+            return ldapUserService.createUser(userDto);
+
         }
     
         // Login User
@@ -50,23 +49,17 @@
         }
 
         @PutMapping("/reinitializePassword/{mail}")
+        @PreAuthorize("@authSecurityService.isLoggedIn(#request.getSession()) and @roleSecurityService.isAdmin(#request.getSession())")
         public ResponseEntity<String> reinitializePasswordUser(@PathVariable String mail, HttpServletRequest request) {
-            if (SessionUtils.isAdmin(request)) {
                 return ldapUserService.reinitializePasswordUser(mail,request);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to reset passwords.");
-            }
         }
 
 
         // Get All Users (Authenticated Request)
         @GetMapping("/all")
+        @PreAuthorize("@authSecurityService.isLoggedIn(#request.getSession()) and @roleSecurityService.isAdmin(#request.getSession())")
         public ResponseEntity<List<UserInfoDto>> getAllUsers(HttpServletRequest request) {
-            if (SessionUtils.isAdmin(request)) {
                 return ldapUserService.getAllUsers(request);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-            }
         }
 
         @GetMapping("/getSessionInfo")
@@ -93,12 +86,11 @@
         }
     
         // Delete User
+        @PreAuthorize("@authSecurityService.isLoggedIn(#request.getSession()) and @roleSecurityService.isAdmin(#request.getSession())")
         @DeleteMapping("/delete/{email}")
         public ResponseEntity<String> deleteUser(@PathVariable String email, HttpServletRequest request) {
-            if (SessionUtils.isAdmin(request)) {
-                return ldapUserService.deleteUser(email,request);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to delete users.");
-            }
+
+            return ldapUserService.deleteUser(email,request);
+
         }
     }
