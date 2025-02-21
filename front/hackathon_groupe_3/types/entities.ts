@@ -33,6 +33,7 @@ export interface Pool {
     user_id: number;
     nom: string;
     experience: number;
+    competences : Competence[];
 }
 
 export interface User {
