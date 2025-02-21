@@ -31,9 +31,9 @@ public class Profil {
     @Column
     private Integer experience;
 
-    @Column(name = "cvUrl")
-    @NotNull
-    private String cvUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    private CV cv;
 
     @ManyToOne
     @JoinColumn(name = "site_id")
