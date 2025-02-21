@@ -9,4 +9,9 @@ export default defineNuxtConfig({
     colorMode: {
         preference: "light",
     },
+    routeRules: {
+        "/api/v1/**": {
+            proxy: { to: "http://backend-service:8080/api/v1/**" },
+        },
+    },
 });
