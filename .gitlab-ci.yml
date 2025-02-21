@@ -133,10 +133,10 @@ deploy_auth:
   script:
     - echo "Deploying authentification..."
     - ansible-playbook ansible/playbooks/deploiement_auth.yml -i ansible/hosts
-  only:
-    changes:
-      - back/auth/**/*
-      - ansible/roles/deployment_auth/**/*
+#  only:
+#    changes:
+#      - back/auth/**/*
+#      - ansible/roles/deployment_auth/**/*
 
 
 deploy_back:
@@ -149,10 +149,10 @@ deploy_back:
     - export ANSIBLE_CONFIG=ansible/ansible.cfg
     - echo "Deploying authentification..."
     - ansible-playbook ansible/playbooks/deploiement_back.yml -i ansible/hosts
-  only:
-    changes:
-      - back/**/*
-      - ansible/roles/deployment_back/**/*
+#  only:
+#    changes:
+#      - back/**/*
+#      - ansible/roles/deployment_back/**/*
 
 deploy_front:
   stage: deploy
