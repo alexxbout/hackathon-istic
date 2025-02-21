@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1740149571571-16
+    id: 1740166656413-1
     author: Busea (generated)
     changes:
     - createTable:
@@ -42,7 +42,37 @@ databaseChangeLog:
             type: VARCHAR(100)
         tableName: spring_session
 - changeSet:
-    id: 1740149571571-17
+    id: 1740166656413-2
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: profil_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: experience
+            type: INTEGER
+        - column:
+            name: nom
+            type: VARCHAR(255)
+        - column:
+            name: prenom
+            type: VARCHAR(255)
+        - column:
+            name: cv_id
+            type: BIGINT
+        - column:
+            name: site_id
+            type: INTEGER
+        tableName: profil
+- changeSet:
+    id: 1740166656413-3
     author: Busea (generated)
     changes:
     - createIndex:
@@ -53,7 +83,7 @@ databaseChangeLog:
         tableName: spring_session
         unique: true
 - changeSet:
-    id: 1740149571571-18
+    id: 1740166656413-4
     author: Busea (generated)
     changes:
     - createIndex:
@@ -63,7 +93,7 @@ databaseChangeLog:
         indexName: spring_session_ix2
         tableName: spring_session
 - changeSet:
-    id: 1740149571571-19
+    id: 1740166656413-5
     author: Busea (generated)
     changes:
     - createIndex:
@@ -73,7 +103,33 @@ databaseChangeLog:
         indexName: spring_session_ix3
         tableName: spring_session
 - changeSet:
-    id: 1740149571571-20
+    id: 1740166656413-6
+    author: Busea (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: cv_id
+        constraintName: ukisfh8ur6a9li76lgcqphif5y4
+        tableName: profil
+- changeSet:
+    id: 1740166656413-7
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: competence_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: nom
+            type: VARCHAR(255)
+        tableName: competence
+- changeSet:
+    id: 1740166656413-8
     author: Busea (generated)
     changes:
     - createTable:
@@ -93,7 +149,145 @@ databaseChangeLog:
             type: OID
         tableName: cv
 - changeSet:
-    id: 1740149571571-21
+    id: 1740166656413-9
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: match_pool_competence_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: competence_id
+            type: BIGINT
+        - column:
+            name: pool_id
+            type: BIGINT
+        tableName: match_pool_competence
+- changeSet:
+    id: 1740166656413-10
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: match_profil_competence_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: competence_id
+            type: BIGINT
+        - column:
+            name: profil_id
+            type: BIGINT
+        tableName: match_profil_competence
+- changeSet:
+    id: 1740166656413-11
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: pool_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: experience
+            type: INTEGER
+        - column:
+            name: nom
+            type: VARCHAR(255)
+        - column:
+            name: user_mail
+            type: VARCHAR(255)
+        tableName: pool
+- changeSet:
+    id: 1740166656413-12
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: projet_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: date_debut
+            type: date
+        - column:
+            name: date_fin
+            type: date
+        - column:
+            name: nom
+            type: VARCHAR(255)
+        - column:
+            name: user_mail
+            type: VARCHAR(255)
+        tableName: projet
+- changeSet:
+    id: 1740166656413-13
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: reservation_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: date_debut
+            type: date
+        - column:
+            name: date_fin
+            type: date
+        - column:
+            name: profil_id
+            type: BIGINT
+        - column:
+            name: id_projet
+            type: BIGINT
+        tableName: reservation
+- changeSet:
+    id: 1740166656413-14
+    author: Busea (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: site_addr_pkey
+            name: id
+            type: INTEGER
+        - column:
+            name: ville
+            type: VARCHAR(255)
+        tableName: site_addr
+- changeSet:
+    id: 1740166656413-15
     author: Busea (generated)
     changes:
     - createTable:
@@ -119,63 +313,37 @@ databaseChangeLog:
             type: BYTEA
         tableName: spring_session_attributes
 - changeSet:
-    id: 1740149571571-22
+    id: 1740166656413-16
     author: Busea (generated)
     changes:
-    - addColumn:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              nullable: false
-            name: id
-            type: BIGINT
-        tableName: match_pool_competence
+    - addForeignKeyConstraint:
+        baseColumnNames: profil_id
+        baseTableName: match_profil_competence
+        constraintName: fk39y6t9qisf23lu09f4mowi1sh
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: profil
+        validate: true
 - changeSet:
-    id: 1740149571571-23
+    id: 1740166656413-17
     author: Busea (generated)
     changes:
-    - addColumn:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              nullable: false
-            name: id
-            type: BIGINT
-        tableName: match_profil_competence
+    - addForeignKeyConstraint:
+        baseColumnNames: id_projet
+        baseTableName: reservation
+        constraintName: fk51xsnkjxvmc755r37mvkm1bgv
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: projet
+        validate: true
 - changeSet:
-    id: 1740149571571-24
-    author: Busea (generated)
-    changes:
-    - addColumn:
-        columns:
-        - column:
-            name: user_mail
-            type: VARCHAR(255)
-        tableName: pool
-- changeSet:
-    id: 1740149571571-25
-    author: Busea (generated)
-    changes:
-    - addColumn:
-        columns:
-        - column:
-            name: user_mail
-            type: VARCHAR(255)
-        tableName: projet
-- changeSet:
-    id: 1740149571571-26
-    author: Busea (generated)
-    changes:
-    - addColumn:
-        columns:
-        - column:
-            name: cv_id
-            type: BIGINT
-        tableName: profil
-- changeSet:
-    id: 1740149571571-27
+    id: 1740166656413-18
     author: Busea (generated)
     changes:
     - addForeignKeyConstraint:
@@ -190,7 +358,82 @@ databaseChangeLog:
         referencedTableName: cv
         validate: true
 - changeSet:
-    id: 1740149571571-28
+    id: 1740166656413-19
+    author: Busea (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: pool_id
+        baseTableName: match_pool_competence
+        constraintName: fk6uu19l40lbk1n0b1b09jkf128
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: pool
+        validate: true
+- changeSet:
+    id: 1740166656413-20
+    author: Busea (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: competence_id
+        baseTableName: match_profil_competence
+        constraintName: fkjcvtke9i8ru5wqw5vnousncih
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: competence
+        validate: true
+- changeSet:
+    id: 1740166656413-21
+    author: Busea (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: competence_id
+        baseTableName: match_pool_competence
+        constraintName: fklffi5mk6b91jfk859dh7hxvbx
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: competence
+        validate: true
+- changeSet:
+    id: 1740166656413-22
+    author: Busea (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: site_id
+        baseTableName: profil
+        constraintName: fknmpo7tdwbbdsuuguo38p4rbc2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: site_addr
+        validate: true
+- changeSet:
+    id: 1740166656413-23
+    author: Busea (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: profil_id
+        baseTableName: reservation
+        constraintName: fkt1x7c2ycmp2s2xwm54t6qa0v1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: profil
+        validate: true
+- changeSet:
+    id: 1740166656413-24
     author: Busea (generated)
     changes:
     - addForeignKeyConstraint:
@@ -204,132 +447,4 @@ databaseChangeLog:
         referencedColumnNames: primary_id
         referencedTableName: spring_session
         validate: true
-- changeSet:
-      id: 1740149571571-29
-      author: Busea (generated)
-      changes:
-          - addUniqueConstraint:
-                columnNames: cv_id
-                constraintName: ukisfh8ur6a9li76lgcqphif5y4
-                tableName: profil
-- changeSet:
-    id: 1740149571571-1
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: competence_id
-        newDataType: bigint
-        tableName: match_pool_competence
-- changeSet:
-    id: 1740149571571-2
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: competence_id
-        newDataType: bigint
-        tableName: match_profil_competence
-- changeSet:
-    id: 1740149571571-3
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: date_debut
-        newDataType: date
-        tableName: projet
-- changeSet:
-    id: 1740149571571-4
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: date_debut
-        newDataType: date
-        tableName: reservation
-- changeSet:
-    id: 1740149571571-5
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: date_fin
-        newDataType: date
-        tableName: projet
-- changeSet:
-    id: 1740149571571-6
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: date_fin
-        newDataType: date
-        tableName: reservation
-- changeSet:
-    id: 1740149571571-7
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id
-        newDataType: bigint
-        tableName: competence
-- changeSet:
-    id: 1740149571571-8
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id
-        newDataType: bigint
-        tableName: pool
-- changeSet:
-    id: 1740149571571-9
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id
-        newDataType: bigint
-        tableName: profil
-- changeSet:
-    id: 1740149571571-10
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id
-        newDataType: bigint
-        tableName: projet
-- changeSet:
-    id: 1740149571571-11
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id
-        newDataType: bigint
-        tableName: reservation
-- changeSet:
-    id: 1740149571571-12
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: id_projet
-        newDataType: bigint
-        tableName: reservation
-- changeSet:
-    id: 1740149571571-13
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: pool_id
-        newDataType: bigint
-        tableName: match_pool_competence
-- changeSet:
-    id: 1740149571571-14
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: profil_id
-        newDataType: bigint
-        tableName: match_profil_competence
-- changeSet:
-    id: 1740149571571-15
-    author: Busea (generated)
-    changes:
-    - modifyDataType:
-        columnName: profil_id
-        newDataType: bigint
-        tableName: reservation
 

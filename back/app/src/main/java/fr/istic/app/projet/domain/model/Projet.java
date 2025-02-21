@@ -18,7 +18,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Projet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
