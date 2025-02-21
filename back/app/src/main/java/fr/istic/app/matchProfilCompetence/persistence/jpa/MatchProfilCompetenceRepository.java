@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MatchProfilCompetenceRepository extends JpaRepository<MatchProfilCompetence, Long> {
 
-    void deleteByProfilId(Long profilId);
+    void deleteAllByProfilId(Long profilId);
 }

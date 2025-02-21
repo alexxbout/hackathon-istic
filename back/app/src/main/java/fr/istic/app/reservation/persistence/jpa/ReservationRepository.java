@@ -29,4 +29,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findAllByProfilId(Long profilId);
 
+    boolean existsByProfilId(Long profilId);
+
 }
