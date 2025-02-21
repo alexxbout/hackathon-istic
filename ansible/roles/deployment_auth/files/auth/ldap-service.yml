@@ -24,5 +24,4 @@ spec:
     - protocol: TCP
       port: 1389       # Port utilisé à l'intérieur du cluster
       targetPort: 1389 # Port exposé par le conteneur OpenLDAP
-      nodePort: 32390  # Port accessible depuis l'extérieur
   type: NodePort       # Type pour exposer en dehors du cluster

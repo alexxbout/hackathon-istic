@@ -10,5 +10,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080 # Port exposé par le conteneur OpenLDAP
-      nodePort: 32389  # Port accessible depuis l'extérieur
+      nodePort: 32390  # Port accessible depuis l'extérieur
   type: NodePort       # Type pour exposer en dehors du cluster
