@@ -37,7 +37,7 @@ public class UserController {
 
 
     @PutMapping("/reinitializePassword/{userId}")
-    public ResponseEntity<String> reinitializePasswordUser(@PathVariable String userId, @RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<String> reinitializePasswordUser(@PathVariable String userId) throws Exception {
         return ResponseEntity.ok(userService.reinitializePasswordUser(userId));
     }
 
