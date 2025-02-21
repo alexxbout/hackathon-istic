@@ -9,7 +9,6 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
-
   "dependencies": {
     "@nuxt/ui": "^2.21.0",
     "axios": "^1.7.9",
