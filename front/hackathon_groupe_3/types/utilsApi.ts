@@ -1,6 +1,5 @@
 import axios from "axios";
-import type { Competence, Pool, Profil, Projet, Reservation } from "./entities";
-import {use} from "h3";
+import type { Competence, Pool, Profil, Projet, Reservation, User } from "./entities";
 
 export class APIUtils {
     private static baseUrl = "/api/v1";

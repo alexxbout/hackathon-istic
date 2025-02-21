@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import { APIUtils } from "~/types/utilsApi";
+import { computed, onMounted, ref } from "vue";
 import type { Profil } from "~/types/entities";
+import { APIUtils } from "~/types/utilsApi";
 
 const profils = ref<Profil[]>([]);
 
@@ -53,10 +53,10 @@ const columns = ref([
     { key: "cv_url", label: "CV" },
 ]);
 
-const sortColumn = ref("id");
+const sortColumn = ref<keyof Profil>("id");
 const sortDirection = ref<"asc" | "desc">("asc");
 const handleSort = (column: string, direction: "asc" | "desc") => {
-    sortColumn.value = column;
+    sortColumn.value = column as keyof Profil;
     sortDirection.value = direction;
 };
 
@@ -66,7 +66,7 @@ const filteredRows = computed(() => {
         .filter((profil) => [profil.nom, profil.prenom].some((value) => value.toLowerCase().includes(searchQuery.value.toLowerCase())))
         .sort((a, b) => {
             const factor = sortDirection.value === "asc" ? 1 : -1;
-            return a[sortColumn.value] > b[sortColumn.value] ? factor : -factor;
+            return (a[sortColumn.value] as any) > (b[sortColumn.value] as any) ? factor : -factor;
         });
 });
 

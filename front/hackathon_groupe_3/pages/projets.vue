@@ -33,7 +33,7 @@
 import { ref } from "vue";
 import ProjectModal from "~/components/modals/ProjectModal.vue";
 import type { Projet } from "~/types/entities";
-import type { Role } from "~/types/roles";
+import type { TypeRole } from "~/types/roles";
 
 const toast = useToast();
 const modal = useModal();
@@ -53,7 +53,7 @@ const projets = ref([
     { id: 11, nom: "Big Data", date_debut: new Date(2026, 1, 1), date_fin: new Date(2026, 12, 31) },
 ]);
 
-const role = ref<Role>("cdp");
+const role = ref<TypeRole>("cdp");
 
 const page = ref(1);
 
