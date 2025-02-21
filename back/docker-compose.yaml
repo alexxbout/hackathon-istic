@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=skillstasks
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      - LDAP_ORGANISATION="ISTIC"
+      - LDAP_DOMAIN="istic.fr"
+      - LDAP_ADMIN_PASSWORD=adminpassword
+    ports:
+      - "1389:389"  # Mapping LDAP port to match your config
+      - "1636:636"  # Secure LDAP (LDAPS)
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: backend-service
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/skillstasks
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_LIQUIBASE_CHANGE_LOG=classpath:db/changelog/db.changelog-master.yaml
+      - SPRING_LIQUIBASE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/skillstasks
+      - SPRING_LIQUIBASE_USER=postgres
+      - SPRING_LIQUIBASE_PASSWORD=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: skillstasks-auth
+    networks:
+      - app-network
+    environment:
+      - SPRING_APPLICATION_NAME=auth
+      - SERVER_PORT=8081
+      - SPRING_LDAP_URLS=ldap://openldap:389  # Updated to use LDAP container
+      - SPRING_LDAP_BASE=dc=istic,dc=fr
+      - SPRING_LDAP_USERNAME=cn=admin,dc=istic,dc=fr
+      - SPRING_LDAP_PASSWORD=adminpassword
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      openldap:
+        condition: service_started
+
+networks:
+  app-network:
+    driver: bridge
