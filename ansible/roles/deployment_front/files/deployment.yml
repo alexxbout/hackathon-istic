@@ -21,4 +21,4 @@ spec:
             - containerPort: 3000
           env:
             - name: REACT_APP_API_URL
-              value: "http://back-service:8080"  # URL du back dans le cluster
+              value: "http://backend-service:8080"  # URL du back dans le cluster
