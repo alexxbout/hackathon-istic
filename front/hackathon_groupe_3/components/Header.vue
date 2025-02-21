@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import type { Role } from "../types/roles";
+import type { TypeRole } from "../types/roles";
 import { RoleConfig } from "../types/roles";
 
 const allLinks = [
@@ -56,7 +56,7 @@ const allLinks = [
     { label: "Projects", icon: "tabler:clipboard-list", to: "/projects", roles: ["cdp", "admin"] },
 ];
 
-const role = ref<Role>("cdp");
+const role = ref<TypeRole>("cdp");
 
 const roleConfig = computed(() => RoleConfig[role.value]);
 

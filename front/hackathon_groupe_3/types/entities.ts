@@ -1,3 +1,5 @@
+import type { TypeRole } from "./roles";
+
 export interface SiteAddr {
     id?: number;
     ville: string;
@@ -8,8 +10,8 @@ export interface Profil {
     nom: string;
     prenom: string;
     experience: number;
-    site_id: number;
-    cv_url?: string;
+    competences: Competence[],
+    cvUrl?: string;
     profile_picture: string;
     ville: string;
 }
@@ -35,14 +37,15 @@ export interface Pool {
 
 export interface User {
     id?: number;
-    role_id: number;
+    email: string;
+    role: TypeRole;
     nom: string;
     prenom: string;
 }
 
 export interface Role {
     id?: number;
-    nom: string;
+    nom: TypeRole;
 }
 
 export interface Competence {

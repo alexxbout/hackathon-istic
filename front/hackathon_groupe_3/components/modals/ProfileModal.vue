@@ -1,7 +1,7 @@
 <template>
     <UModal :ui="{ overlay: { background: 'bg-gray-400/20 backdrop-blur-md' }, width: '' }">
         <UCard class="max-h-[90vh] overflow-y-auto w-[70vw]">
-            <div class="grid grid-cols-2 gap-x-5" :class="!props.profil?.profil.cv_url ? 'divide-x' : ''">
+            <div class="grid grid-cols-2 gap-x-5" :class="!props.profil?.profil.cvUrl ? 'divide-x' : ''">
                 <!-- Left Column -->
                 <div class="flex flex-col justify-between">
                     <div class="flex flex-col gap-y-10">

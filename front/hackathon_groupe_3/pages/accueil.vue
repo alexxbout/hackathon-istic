@@ -30,9 +30,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import TableUser from "~/components/TableUsers.vue";
-import DeleteUser from "~/components/DeleteUser.vue";
 import CreateUser from "~/components/CreateUser.vue";
+import DeleteUser from "~/components/DeleteUser.vue";
+import TableUser from "~/components/TableUsers.vue";
+import type { User } from "~/types/entities";
 
 // État pour suivre l'onglet actif
 const activeTab = ref(0);
@@ -48,14 +49,14 @@ const items = [
         icon: "tabler:users",
     },
 ];
-const handleTabChange = (newTabIndex) => {
+const handleTabChange = (newTabIndex: number) => {
     activeTab.value = newTabIndex;
 };
 
 // Logique pour la gestion des utilisateurs
 const selectedRows = ref([]);
 
-const handleDeleteUsers = (usersToDelete) => {
+const handleDeleteUsers = (usersToDelete: User[]) => {
     if (usersToDelete.length > 0) {
         console.log("Utilisateurs à supprimer :", usersToDelete);
         alert(`${usersToDelete.length} utilisateur(s) supprimé(s).`);
@@ -64,8 +65,8 @@ const handleDeleteUsers = (usersToDelete) => {
     }
 };
 
-const deleteUsers = (usersToDelete) => {
-    data.value = data.value.filter((user) => !usersToDelete.includes(user));
+const deleteUsers = (usersToDelete: User[]) => {
+    // data.value = data.value.filter((user: User) => !usersToDelete.includes(user));
     selectedRows.value = [];
 };
 

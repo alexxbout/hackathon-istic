@@ -34,10 +34,10 @@
 <script setup lang="ts">
 import { format, isSameDay, sub, type Duration } from "date-fns";
 import { computed, ref } from "vue";
-import type { Role } from "../types/roles";
+import type { TypeRole } from "../types/roles";
 
 const props = defineProps<{
-    role: Role;
+    role: TypeRole;
     experienceOptions: { value: number; label: string }[];
     skillOptions: { value: number; label: string }[];
 }>();

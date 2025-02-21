@@ -41,8 +41,8 @@
             <USelectMenu v-model="newUser.role" :options="roleOptions">
               <template #selected>
                 <div v-if="newUser.role" class="flex items-center gap-x-2">
-                  <UIcon :name="getRoleConfig(newUser.role).icon" class="w-5 h-5" />
-                  <span>{{ getRoleConfig(newUser.role).label }}</span>
+                  <!-- <UIcon :name="getRoleConfig(newUser.role).icon" class="w-5 h-5" />
+                  <span>{{ getRoleConfig(newUser.role).label }}</span> -->
                 </div>
                 <span v-else>Choisir un rôle</span>
               </template>
@@ -79,15 +79,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { Role, RoleConfig, roleOptions } from "~/types/roles";
+import { computed, ref } from "vue";
+import type { Role, User } from "~/types/entities";
+import { roleOptions } from "~/types/roles";
 
 const isOpen = ref(false);
-let newUser = ref({
+const newUser = ref<User>({
   nom: "",
   prenom: "",
   email: "",
-  role: null as Role | null,
+  role: "inconnu"
 });
 
 const showErrors = ref(false);
@@ -122,18 +123,12 @@ const isFormValid = computed(() => {
 // Fonction pour réinitialiser le modal et les champs
 function closeModal() {
   isOpen.value = false;
-  newUser.value = {
-    nom: "",
-    prenom: "",
-    email: "",
-    role: null as Role | null,
-  };
   showErrors.value = false; // Réinitialisation de l'état d'erreur
 }
 
 // Fonction pour obtenir la configuration du rôle
-const getRoleConfig = (role: Role | null) => {
-  return RoleConfig[role as Role] ?? { label: "Inconnu", icon: "i-heroicons-question-mark-circle", color: "gray" };
+const getRoleConfig = (role: Role) => {
+  // return RoleConfig[role] ?? { label: "Inconnu", icon: "i-heroicons-question-mark-circle", color: "gray" };
 };
 
 // Fonction pour créer un utilisateur
@@ -143,21 +138,21 @@ async function createUser() {
     showErrors.value = true;
     return;
   }
-    const userData = {
-      nom: newUser.value.nom,
-      prenom: newUser.value.prenom,
-      email: newUser.value.email,
-      role_id: newUser.value.role?.id,
-    };
+    // const userData = {
+    //   nom: newUser.value.nom,
+    //   prenom: newUser.value.prenom,
+    //   email: newUser.value.email,
+    //   role_id: newUser.value.role?.id,
+    // };
 
-    await APIUtils.addUser(userData)
-        .then(response => {
-          console.log('Nouvel utilisateur créé :', response.data);
-          closeModal();
-        })
-        .catch(error => {
-          console.error('Erreur lors de la création de l\'utilisateur :', error);
-        });
+    // await APIUtils.addUser(userData)
+    //     .then(response => {
+    //       console.log('Nouvel utilisateur créé :', response.data);
+    //       closeModal();
+    //     })
+    //     .catch(error => {
+    //       console.error('Erreur lors de la création de l\'utilisateur :', error);
+    //     });
 
 }
 </script>
@@ -168,5 +163,4 @@ async function createUser() {
   font-size: 0.875rem; /* Taille du texte d'erreur */
   margin-top: 0.25rem; /* Un petit espace en haut du message d'erreur */
 }
-
 </style>

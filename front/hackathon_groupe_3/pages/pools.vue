@@ -2,16 +2,16 @@
   <CardPool
       v-for="poolItem in poolsWithCompetences" :key="poolItem.pool.id"
       :competences="poolItem.competences.map(c => ({ nom: c.nom }))" :experience="poolItem.pool.experience"
-      :isChecked="selectedPools.has(poolItem.pool.id)" :nom="poolItem.pool.nom"
-      @click="toggleSelection(poolItem.pool.id)"
+      :isChecked="selectedPools.has(poolItem.pool.id!)" :nom="poolItem.pool.nom"
+      @click="toggleSelection(poolItem.pool.id!)"
       @use-pool="handlePoolSelection"
   />
 </template>
 
 
 <script lang="ts" setup>
-import {ref} from 'vue';
-import type {Competence, Pool} from "~/types/entities";
+import { ref } from 'vue';
+import type { Competence, Pool } from "~/types/entities";
 
 definePageMeta({
   middleware: "auth",
@@ -41,18 +41,18 @@ const toggleSelection = (id: number) => {
 
 function handlePoolSelection() {
   //get competences asscociated with selected pool
-  selectedCompetences.value = poolsWithCompetences.value.map(poolItem => {
-    if (poolItem.pool.id) {
-      if (selectedPools.value.has(poolItem.pool.id)) {
-        return poolItem.competences.map(competence => competence.id);
-      }
-    }
-    return [];
-  }).flat();
+  // selectedCompetences.value = poolsWithCompetences.value.map(poolItem => {
+  //   if (poolItem.pool.id) {
+  //     if (selectedPools.value.has(poolItem.pool.id)) {
+  //       return poolItem.competences.map(competence => competence.id);
+  //     }
+  //   }
+  //   return [];
+  // }).flat();
   console.log(selectedCompetences.value);
   localStorage.setItem('selectedCompetences', JSON.stringify(selectedCompetences.value));
   //set to local storage the experience ofpools selected
-  localStorage.setItem('selectedPools', JSON.stringify(poolsWithCompetences.value.filter(poolItem => selectedPools.value.has(poolItem.pool.id)).map(poolItem => poolItem.pool.experience)));
+  localStorage.setItem('selectedPools', JSON.stringify(poolsWithCompetences.value.filter(poolItem => selectedPools.value.has(poolItem.pool.id!)).map(poolItem => poolItem.pool.experience)));
   //navigateTo('/profils');
   //TODO fix navigate
 }

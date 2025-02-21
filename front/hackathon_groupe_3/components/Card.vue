@@ -29,14 +29,14 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { Role } from "../types/roles";
+import type { TypeRole } from "../types/roles";
 
 const props = defineProps<{
     id: number;
     photo: string;
     nom: string;
     prenom: string;
-    role: Role;
+    role: TypeRole;
     isChecked?: boolean;
     experience: number;
 }>();
