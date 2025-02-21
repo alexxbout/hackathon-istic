@@ -46,8 +46,7 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import type { TypeRole } from "../types/roles";
-import { RoleConfig } from "../types/roles";
+import { RoleConfig, type TypeRole } from "../types/roles";
 
 const allLinks = [
     { label: "Accueil", icon: "material-symbols:home", to: "/accueil", roles: ["admin"] },

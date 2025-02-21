@@ -41,11 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
+import type { User } from "~/types/entities";
 import { RoleConfig } from "~/types/roles";
 import { APIUtils } from "~/types/utilsApi";
 
-const users = ref([]);
+const users = ref<User[]>([]);
 
 const fetchUsers = async () => {
   try {
@@ -75,7 +76,7 @@ const handleSort = (column: string, direction: "asc" | "desc") => {
 
 const searchQuery = ref("");
 const selectedRole = ref("");
-const getRoleConfig = (role) => RoleConfig[role] || { icon: "i-heroicons-question-mark-circle", color: "gray" };
+const getRoleConfig = (role: keyof typeof RoleConfig) => RoleConfig[role] || { icon: "i-heroicons-question-mark-circle", color: "gray" };
 
 const filteredRows = computed(() => {
   return users.value
