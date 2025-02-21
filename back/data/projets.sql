@@ -23,3 +23,4 @@ INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (22, 'Projet 22', '202
 INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (23, 'Projet 23', '2024-07-04', '2025-08-23');
 INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (24, 'Projet 24', '2024-05-19', '2025-12-08');
 INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (25, 'Projet 25', '2024-09-25', '2025-07-31');
+SELECT setval('projet_id_seq', (SELECT MAX(id) FROM projet) + 1);

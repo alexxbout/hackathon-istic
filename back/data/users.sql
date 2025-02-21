@@ -8,3 +8,4 @@ INSERT INTO user (id, role_id, nom) VALUES (7, 1, 'User_7');
 INSERT INTO user (id, role_id, nom) VALUES (8, 1, 'User_8');
 INSERT INTO user (id, role_id, nom) VALUES (9, 1, 'User_9');
 INSERT INTO user (id, role_id, nom) VALUES (10, 2, 'User_10');
+SELECT setval('user_id_seq', (SELECT MAX(id) FROM user) + 1);

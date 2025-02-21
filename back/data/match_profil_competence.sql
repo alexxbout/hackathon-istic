@@ -96,3 +96,4 @@ INSERT INTO match_profil_competence (profil_id, competence_id) VALUES (70, 6);
 INSERT INTO match_profil_competence (profil_id, competence_id) VALUES (98, 18);
 INSERT INTO match_profil_competence (profil_id, competence_id) VALUES (3, 12);
 INSERT INTO match_profil_competence (profil_id, competence_id) VALUES (21, 21);
+SELECT setval('match_profil_competence_id_seq', (SELECT MAX(id) FROM match_profil_competence) + 1);

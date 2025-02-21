@@ -98,3 +98,4 @@ INSERT INTO profil (id, nom, prenom, experience, site_id, cv_url) VALUES (97, 'D
 INSERT INTO profil (id, nom, prenom, experience, site_id, cv_url) VALUES (98, 'Brown', 'Emma', 16, 5, 'https://cv.example.com/98');
 INSERT INTO profil (id, nom, prenom, experience, site_id, cv_url) VALUES (99, 'Williams', 'George', 19, 12, 'https://cv.example.com/99');
 INSERT INTO profil (id, nom, prenom, experience, site_id, cv_url) VALUES (100, 'Martinez', 'Hannah', 3, 4, 'https://cv.example.com/100');
+SELECT setval('profil_id_seq', (SELECT MAX(id) FROM profil) + 1);

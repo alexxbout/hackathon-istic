@@ -98,3 +98,4 @@ INSERT INTO reservation (id, profil_id, date_debut, date_fin, id_projet) VALUES 
 INSERT INTO reservation (id, profil_id, date_debut, date_fin, id_projet) VALUES (98, 26, '2025-01-21', '2025-02-19', 11);
 INSERT INTO reservation (id, profil_id, date_debut, date_fin, id_projet) VALUES (99, 85, '2024-12-27', '2025-04-13', 23);
 INSERT INTO reservation (id, profil_id, date_debut, date_fin, id_projet) VALUES (100, 71, '2024-12-24', '2025-03-21', 23);
+SELECT setval('reservation_id_seq', (SELECT MAX(id) FROM reservation) + 1);

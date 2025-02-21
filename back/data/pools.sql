@@ -48,3 +48,4 @@ INSERT INTO pool (id, email_user, nom, experience) VALUES (47, 'user8@example.co
 INSERT INTO pool (id, email_user, nom, experience) VALUES (48, 'user5@example.com', 'Pool 48', 12);
 INSERT INTO pool (id, email_user, nom, experience) VALUES (49, 'user6@example.com', 'Pool 49', 13);
 INSERT INTO pool (id, email_user, nom, experience) VALUES (50, 'user3@example.com', 'Pool 50', 15);
+SELECT setval('pool_id_seq', (SELECT MAX(id) FROM pool) + 1);

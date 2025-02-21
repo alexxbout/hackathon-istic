@@ -94,3 +94,4 @@ INSERT INTO match_pool_competence (pool_id, competence_id) VALUES (1, 30);
 INSERT INTO match_pool_competence (pool_id, competence_id) VALUES (8, 25);
 INSERT INTO match_pool_competence (pool_id, competence_id) VALUES (33, 8);
 INSERT INTO match_pool_competence (pool_id, competence_id) VALUES (27, 18);
+SELECT setval('match_pool_competence_id_seq', (SELECT MAX(id) FROM match_pool_competence) + 1);

@@ -13,3 +13,4 @@ INSERT INTO site_addr (id, ville) VALUES (12, 'Metz');
 INSERT INTO site_addr (id, ville) VALUES (13, 'Tour');
 INSERT INTO site_addr (id, ville) VALUES (14, 'Lille');
 INSERT INTO site_addr (id, ville) VALUES (15, 'Marseille');
+SELECT setval('site_addr_id_seq', (SELECT MAX(id) FROM site_addr) + 1);

@@ -28,3 +28,4 @@ INSERT INTO competence (id, nom) VALUES (27, 'Compétence 27');
 INSERT INTO competence (id, nom) VALUES (28, 'Compétence 28');
 INSERT INTO competence (id, nom) VALUES (29, 'Compétence 29');
 INSERT INTO competence (id, nom) VALUES (30, 'Compétence 30');
+SELECT setval('competence_id_seq', (SELECT MAX(id) FROM competence) + 1);
