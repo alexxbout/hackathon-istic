@@ -37,6 +37,7 @@ export interface User {
     id?: number;
     role_id: number;
     nom: string;
+    prenom: string;
 }
 
 export interface Role {
