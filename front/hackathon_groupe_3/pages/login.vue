@@ -32,4 +32,20 @@
     </div>
 </template>
 
-<script lang="ts" setup></script>
+<script setup>
+import { navigateTo, useCookie } from '#app';
+
+const handleConnect = () => {
+    console.log("Connexion");
+
+    // Définir un cookie
+    const testCookie = useCookie('auth_token', { maxAge: 3600 }); // Expire après 1h
+    testCookie.value = "MonCookieDeTest";
+
+    // Vérifier que le cookie est bien défini
+    console.log("Cookie défini:", testCookie.value);
+
+    // Rediriger vers une autre page
+    navigateTo('/profils');
+};
+</script>

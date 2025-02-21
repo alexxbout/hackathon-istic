@@ -1,0 +1,72 @@
+--- 
+- name: Install Control node
+  hosts: control
+  remote_user: zprojet
+  become: yes
+  tasks:
+    - name: Install snap package
+      apt:
+        update_cache: true
+        name: snap
+        state: present
+
+    - name: Installer MicroK8s via Snap
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+
+    - name: Ajouter l'utilisateur actuel au groupe MicroK8s
+      shell: |
+        usermod -a -G microk8s $USER
+      become: yes
+
+    - name: Activer les addons nécessaires pour MicroK8s
+      shell: |
+        microk8s enable dns
+        microk8s enable dashboard
+        microk8s enable storage
+        microk8s enable ingress
+      become: yes
+
+    - name: Générer un token pour ajouter un worker node
+      shell: microk8s add-node
+      register: join_token
+
+    - name: Générer le token de join MicroK8s
+      command: microk8s add-node
+      register: join_token
+      delegate_to: "{{ groups['control'][0] }}"
+
+    - name: Afficher le token de join
+      debug:
+        var: join_token.stdout
+
+# ---------------------
+
+- name: Install Worker node
+  hosts: 
+    - worker1
+    - worker2
+  remote_user: zprojet
+  become: yes
+  tasks:
+    - name: Install snap package
+      apt:
+        update_cache: true
+        name: snap
+        state: present
+
+    - name: Installer MicroK8s via Snap
+      snap:
+        name: microk8s
+        state: present
+        classic: yes
+
+    - name: Ajouter l'utilisateur actuel au groupe MicroK8s
+      shell: usermod -a -G microk8s $USER
+      become: yes
+      
+
+    - name: Joindre le worker node au cluster
+      command: "{{ hostvars[groups['control'][0]].join_token.stdout_lines | select('match', '^microk8s join .*') | list | first }} --worker"

@@ -1,0 +1,12 @@
+---
+token_join_control_node: 148.60.11.60:25000/00724ed8369c2c287d22a195f25051df/28e9ad399824
+
+app_namespace: app
+
+#/var/snap/microk8s/current/certs/csr.conf.template
+liste_ip_csr:
+  - "IP.100 = 148.60.11.60"
+  - "IP.101 = 148.60.11.218"
+  - "IP.102 = 148.60.11.220"
+  - "IP.103 = 148.60.9.1"
+  - "IP.104 = 10.152.183.1"

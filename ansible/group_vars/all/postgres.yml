@@ -1,0 +1,10 @@
+version_psql: 17
+
+liste_ip_accept:
+  - "host all all 148.60.9.1/32 md5"
+  - "host all all 148.60.9.2/32 md5"
+  - "host all all 148.60.9.3/32 md5" 
+  
+  - "host all all 148.60.11.220/32 md5" # vm runner
+  - "host all all 148.60.11.60/32 md5"
+  - "host all all 148.60.11.218/32 md5"  

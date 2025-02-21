@@ -1,0 +1,7 @@
+---
+- name: Install postgres
+  hosts: bdd
+  remote_user: zprojet
+  become: yes
+  roles:
+    - install_postgres

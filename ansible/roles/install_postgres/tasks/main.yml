@@ -1,0 +1,41 @@
+---
+- name: Ajouter la clé GPG de PostgreSQL
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Ajouter le dépôt officiel de PostgreSQL
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main"
+    state: present
+    filename: pgdg
+
+- name: Mettre à jour les paquets
+  apt:
+    update_cache: yes
+
+- name: "Installer PostgreSQL {{ version_psql }}"
+  apt:
+    name: "postgresql-{{ version_psql }}"
+    state: present
+
+- name: S'assurer que PostgreSQL est démarré et activé au démarrage
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Ajouter chaque ip nécessaire dans pg_hba.conf
+  lineinfile:
+    path: "/etc/postgresql/{{ version_psql }}/main/pg_hba.conf"
+    line: "{{ item }}"
+    create: yes
+  with_items: "{{ liste_ip_accept }}"
+  notify: Redémarrer PostgreSQL
+
+- name: remplace listen adress
+  lineinfile: 
+    path: "/etc/postgresql/{{ version_psql }}/main/postgresql.conf"
+    regexp: "listen_addresses = "
+    line: "listen_addresses = '*'"
+  notify: Redémarrer PostgreSQL

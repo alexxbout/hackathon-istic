@@ -1,0 +1,13 @@
+# - import_playbook: playbooks/setup_vm.yml
+
+# - import_playbook: playbooks/install_postgres.yml
+
+- import_playbook: playbooks/install_kubernetes_node.yml
+
+
+# - name: pull image sur k8s
+#   hosts: worker-node
+#   remote_user: zprojet
+#   become: yes
+
+# voir comment ajouter aux fichiers template d'ansible pour gérer le versionning (variables)

@@ -1,0 +1,21 @@
+---
+- name: Déploiement front 
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'deployment.yml') | from_yaml }}"
+
+- name: Ajout service 
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'service.yml') | from_yaml }}"
+
+- name: Ajout ingress 
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'ingress.yml') | from_yaml }}"

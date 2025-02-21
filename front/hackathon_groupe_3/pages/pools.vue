@@ -10,6 +10,10 @@
 import PoolModal from "~/components/PoolModal.vue";
 import { ref } from 'vue';
 
+definePageMeta({
+    middleware: "auth",
+});
+
 const modal = ref(false);
 
 const openModal = () => {

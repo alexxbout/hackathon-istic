@@ -1,0 +1,51 @@
+# Base domain entry
+dn: dc=istic,dc=fr
+objectClass: dcObject
+objectClass: organization
+dc: istic
+o: istic
+
+# Organizational Units
+dn: ou=users,dc=istic,dc=fr
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=istic,dc=fr
+objectClass: organizationalUnit
+ou: groups
+
+# Group entries (fixed: removed duplicate objectClass entries)
+dn: cn=admin,ou=groups,dc=istic,dc=fr
+objectClass: groupOfNames
+cn: admin
+member: cn=admin,ou=users
+
+dn: cn=rh,ou=groups,dc=istic,dc=fr
+objectClass: groupOfNames
+cn: rh
+member: cn=dummy,ou=users
+
+dn: cn=cdp,ou=groups,dc=istic,dc=fr
+objectClass: groupOfNames
+cn: cdp
+member: cn=dummy,ou=users
+
+# User entries
+dn: cn=admin,ou=users,dc=istic,dc=fr
+objectClass: inetOrgPerson
+cn: admin
+sn: Doe
+givenName: admin
+mail: admin
+uid: admin
+userPassword: admin
+
+# Placeholder user to satisfy 'member' requirement in empty groups
+dn: cn=dummy,ou=users,dc=istic,dc=fr
+objectClass: inetOrgPerson
+cn: dummy
+sn: Placeholder
+givenName: User
+mail: dummy@istic.fr
+uid: dummy
+userPassword: dummy

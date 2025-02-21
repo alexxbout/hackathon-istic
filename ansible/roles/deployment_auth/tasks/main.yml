@@ -1,0 +1,55 @@
+---
+
+- name: Ajout namsepace auth
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'auth/namespace.yml') | from_yaml }}"
+
+
+- name: Ajout secret ldap
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'auth/ldap-secret.yml') | from_yaml }}"
+
+- name: Ajout configmap ldap
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'auth/ldap-configmap.yml') | from_yaml }}"
+
+- name: Déploiement nginx + ldap
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'auth/deployment.yml') | from_yaml }}"
+
+- name: Ajout service ldap
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'auth/ldap-service.yml') | from_yaml }}"
+
+
+
+- name: Ajout deploiement service auth
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'service_auth/deployment.yml') | from_yaml }}"
+
+
+
+- name: Ajout service  du service d'auth
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/zprojet/.kube/config"
+    namespace: default
+    definition: "{{ lookup('file', 'service_auth/service.yml') | from_yaml }}"
