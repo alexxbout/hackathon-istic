@@ -96,33 +96,7 @@ build_front_image:
       - front/**/*
 
 
-liquibase_update:
-  stage: db
-  image: maven:3.9.9-eclipse-temurin-21-alpine
-  script:
-    - cd back/app
-    - mvn resources:resources
-    - mvn -Dliquibase.driver="$LIQUIBASE_DRIVER" -Dliquibase.url="$LIQUIBASE_URL" -Dliquibase.username="$LIQUIBASE_USERNAME" -Dliquibase.password="$LIQUIBASE_PASSWORD" liquibase:update -f pom.xml
 
-backup_and_upload_database:
-  stage: db
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache postgresql-client rclone curl ca-certificates
-    - mkdir -p /root/.config/rclone
-    - echo "$RCLONE_CONFIG" | base64 -d > /root/.config/rclone/rclone.conf
-    - rclone --config=/root/.config/rclone/rclone.conf listremotes
-  script:
-    - DATE=$(date +%Y-%m-%d_%H-%M-%S)
-    - DUMP_FILE=backup_$DATE.sql  # Use .sql extension for SQL format dump
-    - echo "Creating PostgreSQL SQL dump from $DB_HOST..."
-    - PGPASSWORD="$DB_PASSWORD" pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -F p -f "$DUMP_FILE" "$DB_NAME"
-    - ls -lah "$DUMP_FILE"  # List the generated dump file
-    - echo "Uploading $DUMP_FILE to OneDrive..."
-    - ls -lah /tmp
-    - rclone --config=/root/.config/rclone/rclone.conf copy "$DUMP_FILE" "$ONEDRIVE_REMOTE" --progress
-    - echo "Upload complete! Deleting local dump..."
-    - rm -f "$DUMP_FILE"
 
 deploy_auth:
   stage: deploy
