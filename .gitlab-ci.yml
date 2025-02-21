@@ -1,0 +1,162 @@
+image: "ubuntu:latest"
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+stages:
+  - build
+  - db
+  - deploy
+
+variables:
+  DOCKER_IMAGE_NAME: "hackathon2025/skillstasks_repo"
+  DOCKER_HUB_ID: hackathon2025
+  DOCKER_HUB_PASSWORD: M=AH*+fEK5gDc,q
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - name: docker:dind
+    alias: docker
+
+build_back_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for backend"
+    - cd back/app/
+    - docker build -t ${DOCKER_IMAGE_NAME}-back:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-back:latest ${DOCKER_IMAGE_NAME}-back:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-back:latest
+    - docker push ${DOCKER_IMAGE_NAME}-back:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - back/app/**/*
+
+build_auth_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for authentication service"
+    - cd back/auth/
+    - docker build -t ${DOCKER_IMAGE_NAME}-auth:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-auth:latest ${DOCKER_IMAGE_NAME}-auth:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-auth:latest
+    - docker push ${DOCKER_IMAGE_NAME}-auth:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - back/auth/**/* 
+
+
+build_front_image:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y docker.io
+    - docker info
+    - echo "Building Docker image for front service"
+    - cd front/hackathon_groupe_3
+    - docker build -t ${DOCKER_IMAGE_NAME}-front:latest .
+    - echo "Tagging Docker image"
+    - VERSION=$(date +%Y%m%d%H%M%S)  # Versionnement avec date et heure
+    - docker tag ${DOCKER_IMAGE_NAME}-front:latest ${DOCKER_IMAGE_NAME}-front:$VERSION
+    - echo "Logging into Docker Hub"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+    - echo "Pushing Docker images..."
+    - docker push ${DOCKER_IMAGE_NAME}-front:latest
+    - docker push ${DOCKER_IMAGE_NAME}-front:$VERSION
+    - echo "Logging out from Docker Hub"
+    - docker logout
+  only:
+    changes:
+      - front/**/*
+
+
+liquibase_update:
+  stage: db
+  image: maven:3.9.9-eclipse-temurin-21-alpine
+  script:
+    - cd back/app
+    - mvn resources:resources
+    - mvn -Dliquibase.driver="$LIQUIBASE_DRIVER" -Dliquibase.url="$LIQUIBASE_URL" -Dliquibase.username="$LIQUIBASE_USERNAME" -Dliquibase.password="$LIQUIBASE_PASSWORD" liquibase:update -f pom.xml
+
+backup_and_upload_database:
+  stage: db
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache postgresql-client rclone curl ca-certificates
+    - mkdir -p /root/.config/rclone
+    - echo "$RCLONE_CONFIG" | base64 -d > /root/.config/rclone/rclone.conf
+    - rclone --config=/root/.config/rclone/rclone.conf listremotes
+  script:
+    - DATE=$(date +%Y-%m-%d_%H-%M-%S)
+    - DUMP_FILE=backup_$DATE.sql  # Use .sql extension for SQL format dump
+    - echo "Creating PostgreSQL SQL dump from $DB_HOST..."
+    - PGPASSWORD="$DB_PASSWORD" pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -F p -f "$DUMP_FILE" "$DB_NAME"
+    - ls -lah "$DUMP_FILE"  # List the generated dump file
+    - echo "Uploading $DUMP_FILE to OneDrive..."
+    - ls -lah /tmp
+    - rclone --config=/root/.config/rclone/rclone.conf copy "$DUMP_FILE" "$ONEDRIVE_REMOTE" --progress
+    - echo "Upload complete! Deleting local dump..."
+    - rm -f "$DUMP_FILE"
+
+deploy_auth:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deploiement_auth.yml -i ansible/hosts
+  only:
+    changes:
+      - back/auth/**/*
+      - ansible/roles/deployment_auth/**/*
+
+
+deploy_back:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deploiement_back.yml -i ansible/hosts
+  only:
+    changes:
+      - back/**/*
+      - ansible/roles/deployment_back/**/*
+
+deploy_front:
+  stage: deploy
+  tags:
+    - "prod"
+  before_script:
+    - apt-get update && apt-get install -y ansible sshpass
+  script:
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
+    - echo "Deploying authentification..."
+    - ansible-playbook ansible/playbooks/deploiement_front.yml -i ansible/hosts
+
+  
+

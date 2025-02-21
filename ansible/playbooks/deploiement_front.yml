@@ -1,0 +1,7 @@
+---
+- name: Install Control node
+  hosts: control
+  remote_user: zprojet
+  become: yes
+  roles:
+    - deployment_front

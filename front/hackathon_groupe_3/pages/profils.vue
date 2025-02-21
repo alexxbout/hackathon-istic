@@ -35,6 +35,10 @@ import type { Competence, Profil, ProfilCompetences } from "~/types/entities";
 import { ProfilModalMode } from "~/types/modals";
 import type { Role } from "~/types/roles";
 
+definePageMeta({
+    middleware: "auth",
+});
+
 interface CustomProfil {
     profil: Profil;
     competences: Competence[];
