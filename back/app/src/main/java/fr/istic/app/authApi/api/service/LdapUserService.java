@@ -81,7 +81,13 @@ public class LdapUserService {
         userDto.setPassword(password.get("password"));
         HttpEntity<UserDto> entity = new HttpEntity<>(userDto, headers);
         try {
-            return restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate(); // Delete session from PostgreSQL
+            }
+            return response;
         } catch (HttpClientErrorException e) {
             String error = extractErrorMessageFromException(e);
             // If the error status code is 404, return it as part of the response
