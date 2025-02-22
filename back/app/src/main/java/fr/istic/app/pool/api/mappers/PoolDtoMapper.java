@@ -23,6 +23,9 @@ public interface PoolDtoMapper {
     @Named("competenceListToDtoList")
     default List<CompetenceDto> competenceListToDtoList(List<MatchPoolCompetence> matchPoolCompetences) {
 
+        if (matchPoolCompetences == null) {
+            return List.of();
+        }
         var competenceInstance = CompetenceDtoMapper.INSTANCE;
 
         return matchPoolCompetences.stream()
