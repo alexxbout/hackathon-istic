@@ -46,7 +46,7 @@ public class CreatePoolUseCase {
                 .toList();
 
         this.matchPoolCompetenceRepository.saveAll(poolCompetenceRelations);
-
+        savedPool.setCompetences(poolCompetenceRelations);
         return savedPool;
     }
 
