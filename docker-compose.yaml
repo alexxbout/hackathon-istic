@@ -94,19 +94,14 @@ services:
         image: postgres:16-alpine
         container_name: db-initializer
         networks:
-            - app-network
+        - app-network
         depends_on:
             app:
                 condition: service_started
         volumes:
-            - ./back/data:/docker-entrypoint-initdb.d
-        command: >
-            sh -c "
-            echo 'Waiting for backend to be ready...';
-            sleep 15;
-            echo 'Inserting initial data...';
-            PGPASSWORD=postgres psql -h postgres -U postgres -d skillstasks -f /docker-entrypoint-initdb.d/main.sql;
-            echo 'Data successfully inserted.'"
+        - ./back/data:/docker-entrypoint-initdb.d
+        - ./back/data/init-db.sh:/init-db.sh
+        command: [ "sh", "/init-db.sh" ]
 
 networks:
     app-network:
