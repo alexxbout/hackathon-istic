@@ -32,6 +32,7 @@ services:
             - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/skillstasks
             - SPRING_LIQUIBASE_USER=postgres
             - SPRING_LIQUIBASE_PASSWORD=postgres
+            - LDAP_USER_SERVICE_BASE_URL=http://backend-auth:8081/api/users
         ports:
             - "8080:8080"
         depends_on:
@@ -48,7 +49,7 @@ services:
         environment:
             - SPRING_APPLICATION_NAME=auth
             - SERVER_PORT=8081
-            - SPRING_LDAP_URLS=ldap://localhost:1389
+            - SPRING_LDAP_URLS=ldap://openldap:1389
             - SPRING_LDAP_BASE=dc=istic,dc=fr
             - SPRING_LDAP_USERNAME=cn=admin,dc=istic,dc=fr
             - SPRING_LDAP_PASSWORD=adminpassword
@@ -58,7 +59,7 @@ services:
             postgres:
                 condition: service_healthy
             openldap:
-                condition: service_started
+                condition: service_healthy
 
     openldap:
         image: hackathon2025/openldap_with_data
@@ -68,6 +69,10 @@ services:
             - "1636:1636"
         networks:
             - app-network
+        healthcheck:
+            test: ["CMD", "ldapsearch", "-H", "ldap://localhost:1389", "-D", "cn=admin,dc=istic,dc=fr", "-w", "adminpassword", "-b", "dc=istic,dc=fr"]
+            interval: 10s
+            retries: 5
 
 
     front:
