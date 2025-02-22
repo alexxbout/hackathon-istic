@@ -1,6 +1,6 @@
 <template>
     <div class="border-2 border-black rounded-xl flex items-center justify-center w-full h-max p-3 gap-x-2.5">
-        <USelectMenu @change="handleSkillsUpdate" class="w-full" variant="outline" color="gray" size="md" v-model="selectedSkills" :options="skillOptions" :placeholder="selectSkillPlaceholder" searchable :searchable-placeholder="skillSearchText" multiple>
+        <USelectMenu @change="handleSkillsUpdate" class="flex-1 min-w-0" variant="outline" color="gray" size="md" v-model="selectedSkills" :options="skillOptions" :placeholder="selectSkillPlaceholder" searchable :searchable-placeholder="skillSearchText" multiple>
             <template #label>
                 <span v-if="selectedSkills.length" class="truncate">{{ selectedSkillLabels }}</span>
                 <span v-else>{{ selectSkillPlaceholder }}</span>
@@ -11,9 +11,9 @@
             </template>
         </USelectMenu>
 
-        <USelect @change="handleExperienceUpdate" class="w-full" variant="outline" color="gray" size="md" v-model="selectedExperience" :options="experiencesOptions" :placeholder="experiencePlaceholder" />
+        <USelect @change="handleExperienceUpdate" class="flex-1 min-w-0" variant="outline" color="gray" size="md" v-model="selectedExperience" :options="experiencesOptions" :placeholder="experiencePlaceholder" />
 
-        <div v-if="props.role != 'rh'" ref="datePickerElement" class="w-full">
+        <div v-if="props.role != 'rh'" ref="datePickerElement" class="flex-1 min-w-0">
             <UPopover class="w-full" :popper="{ placement: 'bottom-start' }">
                 <UButton size="md" icon="i-heroicons-calendar-days-20-solid"> {{ format(selectedPeriod.start, "d MMM, yyy") }} - {{ format(selectedPeriod.end, "d MMM, yyy") }}</UButton>
 

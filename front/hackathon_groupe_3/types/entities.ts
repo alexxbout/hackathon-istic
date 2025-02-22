@@ -10,7 +10,7 @@ export interface Profil {
     nom: string;
     prenom: string;
     experience: number;
-    competences: Competence[],
+    competences: Competence[];
     cvUrl?: string;
     profile_picture: string;
     ville: string;
@@ -33,7 +33,7 @@ export interface Pool {
     user_id: number;
     nom: string;
     experience: number;
-    competences : Competence[];
+    competences: Competence[];
 }
 
 export interface User {
