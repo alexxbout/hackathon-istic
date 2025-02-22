@@ -19,12 +19,12 @@ services:
         image: osixia/openldap:latest
         container_name: openldap
         environment:
-            - LDAP_ORGANISATION="ISTIC"
-            - LDAP_DOMAIN="istic.fr"
+            - LDAP_ORGANISATION=ISTIC
+            - LDAP_DOMAIN=istic.fr
             - LDAP_ADMIN_PASSWORD=adminpassword
         ports:
-            - "1389:389" # Mapping LDAP port to match your config
-            - "1636:636" # Secure LDAP (LDAPS)
+            - 389:389
+            - 636:636
         networks:
             - app-network
 
@@ -61,12 +61,12 @@ services:
         environment:
             - SPRING_APPLICATION_NAME=auth
             - SERVER_PORT=8081
-            - SPRING_LDAP_URLS=ldap://openldap:389 # Updated to use LDAP container
+            - SPRING_LDAP_URLS=ldap://openldap:389
             - SPRING_LDAP_BASE=dc=istic,dc=fr
             - SPRING_LDAP_USERNAME=cn=admin,dc=istic,dc=fr
             - SPRING_LDAP_PASSWORD=adminpassword
         ports:
-            - "8081:8081"
+            - 8081:8081
         depends_on:
             postgres:
                 condition: service_healthy
@@ -83,8 +83,8 @@ services:
         ports:
             - "3000:3000"
         volumes:
-            - ./front/hackathon_groupe_3:/app  # Monte le code local dans /app du container
-            - /app/node_modules  # Évite de partager les node_modules entre le container et la machine locale
+            - ./front/hackathon_groupe_3:/app  
+            - /app/node_modules
 
 networks:
     app-network:
