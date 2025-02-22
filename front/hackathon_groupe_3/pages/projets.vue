@@ -1,30 +1,33 @@
 <template>
-    <div class="flex items-center justify-center w-full h-full">
-        <div class="flex flex-col items-center justify-center w-full h-full py-10 gap-y-5 mx-80">
-            <!-- Header -->
-            <div class="flex items-center justify-between w-full">
-                <div class="flex items-center justify-center gap-x-2">
-                    <span class="text-3xl font-medium">Projets</span>
-                    <span class="text-2xl self-end">({{ projets.length }})</span>
+    <div class="h-screen w-screen flex flex-col">
+        <Header />
+        <div class="flex items-center justify-center w-full h-full">
+            <div class="flex flex-col items-center justify-center w-full h-full py-10 gap-y-5 mx-80">
+                <!-- Header -->
+                <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center justify-center gap-x-2">
+                        <span class="text-3xl font-medium">Projets</span>
+                        <span class="text-2xl self-end">({{ projets.length }})</span>
+                    </div>
+                    <div class="flex items-center justify-center w-max gap-x-2">
+                        <UButton v-if="role != 'rh'" color="primary" icon="ic:baseline-add-circle-outline" variant="soft" @click="handleOpenModal">Créer un nouveau projet</UButton>
+                    </div>
                 </div>
-                <div class="flex items-center justify-center w-max gap-x-2">
-                    <UButton v-if="role != 'rh'" color="primary" icon="ic:baseline-add-circle-outline" variant="soft" @click="handleOpenModal">Créer un nouveau projet</UButton>
+
+                <!-- Single Project View -->
+                <div v-if="selectedProject.id" class="w-full">
+                    <UButton class="mb-4" color="gray" icon="lucide:arrow-left" variant="soft" @click="clearSelectedProject"> Retour à la liste </UButton>
+                    <CardProjet :date_debut="selectedProject.date_debut" :date_fin="selectedProject.date_fin" :nom="selectedProject.nom" :role="role" class="w-full" />
                 </div>
-            </div>
 
-            <!-- Single Project View -->
-            <div v-if="selectedProject.id" class="w-full">
-                <UButton class="mb-4" color="gray" icon="lucide:arrow-left" variant="soft" @click="clearSelectedProject"> Retour à la liste </UButton>
-                <CardProjet :date_debut="selectedProject.date_debut" :date_fin="selectedProject.date_fin" :nom="selectedProject.nom" :role="role" class="w-full" />
-            </div>
+                <!-- Liste des projets -->
+                <div v-else class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
+                    <CardProjet v-for="projet in paginatedProjets" :key="projet.id" :date_debut="projet.date_debut" :date_fin="projet.date_fin" :nom="projet.nom" :role="role" />
+                </div>
 
-            <!-- Liste des projets -->
-            <div v-else class="grid grid-cols-2 grid-rows-3 gap-2 content-between w-full">
-                <CardProjet v-for="projet in paginatedProjets" :key="projet.id" :date_debut="projet.date_debut" :date_fin="projet.date_fin" :nom="projet.nom" :role="role" />
+                <!--Pagination-->
+                <UPagination v-show="projets.length > itemsPerPage" v-model="page" :page-count="itemsPerPage" :total="projets.length" size="xl" />
             </div>
-
-            <!--Pagination-->
-            <UPagination v-show="projets.length > itemsPerPage" v-model="page" :page-count="itemsPerPage" :total="projets.length" size="xl" />
         </div>
     </div>
 </template>
@@ -34,6 +37,12 @@ import { ref } from "vue";
 import ProjectModal from "~/components/modals/ProjectModal.vue";
 import type { Projet } from "~/types/entities";
 import type { TypeRole } from "~/types/roles";
+
+definePageMeta({
+    middleware: "auth",
+});
+
+const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
 
 const toast = useToast();
 const modal = useModal();
@@ -52,8 +61,6 @@ const projets = ref([
     { id: 10, nom: "IoT", date_debut: new Date(2026, 1, 1), date_fin: new Date(2026, 12, 31) },
     { id: 11, nom: "Big Data", date_debut: new Date(2026, 1, 1), date_fin: new Date(2026, 12, 31) },
 ]);
-
-const role = ref<TypeRole>("cdp");
 
 const page = ref(1);
 

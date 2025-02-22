@@ -1,32 +1,35 @@
 <template>
-    <div class="flex flex-col min-h-screen">
-        <!-- Contenu principal -->
-        <div class="flex flex-col items-center flex-grow py-10 gap-y-5 mx-80">
-            <!-- Header -->
-            <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-x-2">
-                    <span class="text-3xl font-medium">Pools</span>
-                    <span class="text-2xl self-end">({{ poolsWithCompetences.length }})</span>
-                </div>
-                <div class="flex items-center gap-x-2">
-                    <UButton variant="soft" color="green" icon="lucide:user-plus" @click="openCreateModal"> Créer un nouveau pool </UButton>
+    <div class="h-screen w-screen flex flex-col">
+        <Header />
+        <div class="flex flex-col min-h-screen">
+            <!-- Contenu principal -->
+            <div class="flex flex-col items-center flex-grow py-10 gap-y-5 mx-80">
+                <!-- Header -->
+                <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center gap-x-2">
+                        <span class="text-3xl font-medium">Pools</span>
+                        <span class="text-2xl self-end">({{ poolsWithCompetences.length }})</span>
+                    </div>
+                    <div class="flex items-center gap-x-2">
+                        <UButton variant="soft" color="green" icon="lucide:user-plus" @click="openCreateModal"> Créer un nouveau pool </UButton>
 
-                    <PoolModal v-model="modal" :id="newPool.id" :user_id="-1" :nom="newPool.nom" :competences="newPool.competences" :experience="newPool.experience" @updatePool="updatePool" @createPool="createPool" @close="closeModal" />
+                        <PoolModal v-model="modal" :id="newPool.id" :user_id="-1" :nom="newPool.nom" :competences="newPool.competences" :experience="newPool.experience" @updatePool="updatePool" @createPool="createPool" @close="closeModal" />
+                    </div>
                 </div>
+
+                <!-- Grid des pools -->
+                <div v-if="hotreload" class="grid grid-cols-2 gap-4 w-full">
+                    <CardPool v-for="poolItem in paginatedPools" :id="poolItem.id" :key="poolItem.id" :user_id="-1" :competences="poolItem.competences" :experience="poolItem.experience" :nom="poolItem.nom" :poolId="poolItem.id" @click="toggleSelection(poolItem.id!)" @poolUpdated="updatePool" @deletePool="deletePool" @usePool="handlePoolSelection" />
+                </div>
+
+                <!-- Espace vide pour pousser la pagination en bas -->
+                <div class="flex-grow"></div>
             </div>
 
-            <!-- Grid des pools -->
-            <div v-if="hotreload" class="grid grid-cols-2 gap-4 w-full">
-                <CardPool v-for="poolItem in paginatedPools" :id="poolItem.id" :key="poolItem.id" :user_id="-1" :competences="poolItem.competences" :experience="poolItem.experience" :nom="poolItem.nom" :poolId="poolItem.id" @click="toggleSelection(poolItem.id!)" @poolUpdated="updatePool" @deletePool="deletePool" @usePool="handlePoolSelection" />
+            <!-- Pagination en bas -->
+            <div class="flex justify-center pb-6">
+                <UPagination v-show="poolsWithCompetences.length > itemsPerPage" v-model="page" size="lg" :total="poolsWithCompetences.length" :page-count="itemsPerPage" />
             </div>
-
-            <!-- Espace vide pour pousser la pagination en bas -->
-            <div class="flex-grow"></div>
-        </div>
-
-        <!-- Pagination en bas -->
-        <div class="flex justify-center pb-6">
-            <UPagination v-show="poolsWithCompetences.length > itemsPerPage" v-model="page" size="lg" :total="poolsWithCompetences.length" :page-count="itemsPerPage" />
         </div>
     </div>
 </template>
@@ -35,10 +38,13 @@
 import { ref } from "vue";
 import PoolModal from "~/components/PoolModal.vue";
 import type { Pool } from "~/types/entities";
+import type { TypeRole } from "~/types/roles";
 
-// definePageMeta({
-//   middleware: "auth",
-// });
+definePageMeta({
+    middleware: "auth",
+});
+
+const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
 
 const modal = ref(false);
 const hotreload = ref(true);
@@ -217,9 +223,9 @@ function handlePoolSelection() {
     //   return [];
     // }).flat();
     console.log(selectedCompetences.value);
-    localStorage.setItem("selectedCompetences", JSON.stringify(selectedCompetences.value));
+    // localStorage.setItem("selectedCompetences", JSON.stringify(selectedCompetences.value));
     //set to local storage the experience ofpools selected
-    localStorage.setItem("selectedPools", JSON.stringify(poolsWithCompetences.value.filter((poolItem) => selectedPools.value.has(poolItem.id!)).map((poolItem) => poolItem.experience)));
+    // localStorage.setItem("selectedPools", JSON.stringify(poolsWithCompetences.value.filter((poolItem) => selectedPools.value.has(poolItem.id!)).map((poolItem) => poolItem.experience)));
     //navigateTo('/profils');
     //TODO fix navigate
 }

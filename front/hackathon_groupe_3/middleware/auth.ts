@@ -1,16 +1,15 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    const isLoggedIn = useCookie("auth_token").value !== undefined;
+export default defineNuxtRouteMiddleware(async () => {
+    console.log("Auth middleware");
+    
+    const { userRole, fetchSession } = useAuth();
+    const nuxtApp = useNuxtApp();
 
-    if (!isLoggedIn) {
-        if (to.path === "/") {
-            return navigateTo("/login");
-        }
-        if (to.path !== "/login") {
-            return navigateTo("/login");
-        }
-    } else {
-        if (to.path === "/") {
-            return navigateTo("/profils");
-        }
+    if (!userRole.value) {
+        await fetchSession();
+    }
+
+    if (!userRole.value) {
+        console.error("Non connecté, redirection vers /login");
+        return nuxtApp.runWithContext(() => navigateTo("/login"));
     }
 });

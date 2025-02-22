@@ -1,8 +1,50 @@
+import type { AxiosResponse } from "axios";
 import axios from "axios";
 import type { Competence, Pool, Profil, Projet, Reservation, User } from "./entities";
+import type { TypeRole } from "./roles";
+
+interface Login {
+    message: string;
+    role: string;
+    nom: string;
+    prenom: string;
+    mail: string;
+    image: string;
+    firstLogin: true;
+}
+
+interface UserSession {
+    nom: string;
+    prenom: string;
+    email: string;
+    password: string;
+    role: string;
+    image: string;
+}
+
+interface Session {
+    nom: string;
+    prenom: string;
+    mail: string;
+    image: string;
+    firstLogin: boolean;
+    role: TypeRole;
+}
 
 export class APIUtils {
     private static baseUrl = "/api/v1";
+
+    static async login(mail: string, password: string): Promise<AxiosResponse<Login>> {
+        return axios.post(`${this.baseUrl}/users/login`, { mail, password });
+    }
+
+    static async logout(): Promise<void> {
+        return axios.post(`${this.baseUrl}/users/logout`);
+    }
+
+    static async getSessionInfo(): Promise<AxiosResponse<Session>> {
+        return axios.get(`${this.baseUrl}/users/getSessionInfo`);
+    }
 
     static async getProfils() {
         return axios.get(`${this.baseUrl}/profils`);
