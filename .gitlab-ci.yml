@@ -103,6 +103,9 @@ liquibase_update:
     - cd back/app
     - mvn resources:resources
     - mvn -Dliquibase.driver="$LIQUIBASE_DRIVER" -Dliquibase.url="$LIQUIBASE_URL" -Dliquibase.username="$LIQUIBASE_USERNAME" -Dliquibase.password="$LIQUIBASE_PASSWORD" liquibase:update -f pom.xml
+  only:
+    changes:
+      - back/app/**/*
 
 backup_and_upload_database:
   stage: db
@@ -123,6 +126,9 @@ backup_and_upload_database:
     - rclone --config=/root/.config/rclone/rclone.conf copy "$DUMP_FILE" "$ONEDRIVE_REMOTE" --progress
     - echo "Upload complete! Deleting local dump..."
     - rm -f "$DUMP_FILE"
+  only:
+    changes:
+      - back/app/**/*
 
 deploy_auth:
   stage: deploy
