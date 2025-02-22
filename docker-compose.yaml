@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
     postgres:
         image: postgres:16-alpine
@@ -14,6 +16,7 @@ services:
             test: ["CMD", "pg_isready", "-U", "postgres"]
             interval: 5s
             retries: 5
+            start_period: 10s
 
     app:
         build:
@@ -74,7 +77,6 @@ services:
             interval: 10s
             retries: 5
 
-
     front:
         build:
             context: ./front/hackathon_groupe_3
@@ -87,6 +89,24 @@ services:
         volumes:
             - ./front/hackathon_groupe_3:/app
             - /app/node_modules
+
+    init-db:
+        image: postgres:16-alpine
+        container_name: db-initializer
+        networks:
+            - app-network
+        depends_on:
+            app:
+                condition: service_started
+        volumes:
+            - ./back/data:/docker-entrypoint-initdb.d
+        command: >
+            sh -c "
+            echo 'Waiting for backend to be ready...';
+            sleep 15;
+            echo 'Inserting initial data...';
+            PGPASSWORD=postgres psql -h postgres -U postgres -d skillstasks -f /docker-entrypoint-initdb.d/main.sql;
+            echo 'Data successfully inserted.'"
 
 networks:
     app-network:

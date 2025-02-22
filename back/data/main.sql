@@ -1,8 +1,8 @@
-\i competences.sql
-\i sites.sql
-\i profils.sql
-\i pools.sql
-\i projets.sql
-\i reservations.sql
-\i match_pool_competence.sql
-\i match_profil_competence.sql
+\i '/docker-entrypoint-initdb.d/competences.sql'
+\i '/docker-entrypoint-initdb.d/sites.sql'
+\i '/docker-entrypoint-initdb.d/profils.sql'
+\i '/docker-entrypoint-initdb.d/pools.sql'
+\i '/docker-entrypoint-initdb.d/projets.sql'
+\i '/docker-entrypoint-initdb.d/reservations.sql'
+\i '/docker-entrypoint-initdb.d/match_pool_competence.sql'
+\i '/docker-entrypoint-initdb.d/match_profil_competence.sql'
