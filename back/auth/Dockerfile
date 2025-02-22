@@ -9,5 +9,5 @@ RUN mvn clean package -DskipTests
 FROM openjdk:21-jdk-slim
 WORKDIR /auth
 COPY --from=build /auth/target/*.jar auth.jar
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "auth.jar"]
