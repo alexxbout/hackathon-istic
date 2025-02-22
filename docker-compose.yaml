@@ -38,6 +38,38 @@ services:
             postgres:
                 condition: service_healthy
 
+    auth:
+        build:
+            context: ./back/auth
+            dockerfile: Dockerfile
+        container_name: skillstasks-auth
+        networks:
+            - app-network
+        environment:
+            - SPRING_APPLICATION_NAME=auth
+            - SERVER_PORT=8081
+            - SPRING_LDAP_URLS=ldap://openldap:389
+            - SPRING_LDAP_BASE=dc=istic,dc=fr
+            - SPRING_LDAP_USERNAME=cn=admin,dc=istic,dc=fr
+            - SPRING_LDAP_PASSWORD=adminpassword
+        ports:
+            - 8081:8081
+        depends_on:
+            postgres:
+                condition: service_healthy
+            openldap:
+                condition: service_started
+
+    openldap:
+        image: hackathon2025/openldap_with_data
+        container_name: openldap
+        ports:
+            - 1389:1389
+            - 1636:1636
+        networks:
+            - app-network
+
+
     front:
         build:
             context: ./front/hackathon_groupe_3
