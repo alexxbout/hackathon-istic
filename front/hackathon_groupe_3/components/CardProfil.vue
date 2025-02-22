@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between">
             <!-- Avatar + Identitié -->
             <div class="flex items-center justify-center gap-x-2">
-                <UAvatar :src="props.photo" size="lg" alt="Photo de profil" />
+                <UAvatar :src="props.photo" size="lg" :alt="props.prenom + ' ' + props.nom" />
                 <div class="flex flex-col">
                     <span class="text-lg font-semibold">{{ props.prenom }} {{ props.nom }}</span>
                     <UBadge variant="soft" :ui="{ rounded: 'rounded-full' }" :color="getColor(props.experience)" class="w-fit">

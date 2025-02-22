@@ -38,7 +38,6 @@ import type { TypeRole } from "../types/roles";
 
 const props = defineProps<{
     role: TypeRole;
-    experienceOptions: { value: number; label: string }[];
     skillOptions: { value: number; label: string }[];
 }>();
 
@@ -57,7 +56,7 @@ const selectedSkillLabels = computed(() => {
 
 const selectedExperience = ref();
 
-const experiencesOptions = ref<{ value: number; label: string }[]>(props.experienceOptions);
+const experiencesOptions = defineModel<{ value: number; label: string }[]>("experienceOptions");
 
 const experiencePlaceholder = ref("Filtrer sur l'expérience");
 
@@ -83,7 +82,7 @@ const selectRange = (duration: Duration) => {
 
 const clearFilters = () => {
     console.log("Clearing filters");
-    
+
     selectedSkills.value = [];
     selectedExperience.value = null;
     selectedPeriod.value = { start: new Date(), end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)) };
@@ -114,7 +113,7 @@ const handleExperienceUpdate = (experience: number) => {
 
 const handlePeriodUpdate = (period: { start: Date; end: Date | number }) => {
     console.log("Period filter updated", period);
-    
+
     selectedPeriod.value = period;
     emits("updatePeriod", period);
 };
@@ -125,7 +124,7 @@ onMounted(() => {
     if (button) {
         button.classList.add("w-full");
     }
-})
+});
 
 defineExpose({ clearFilters });
 </script>
