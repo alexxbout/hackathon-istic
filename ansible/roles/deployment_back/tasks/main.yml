@@ -1,5 +1,5 @@
 ---
-- name: Déploiement back 
+- name: Deployment back
   kubernetes.core.k8s:
     state: present
     kubeconfig: "/home/zprojet/.kube/config"
@@ -11,8 +11,7 @@
     state: present
     kubeconfig: "/home/zprojet/.kube/config"
     namespace: default
-    definition: "{{ lookup('file', 'service.yml') | from_yaml }}"
-
+    definition: "{{ lookup('file', 'service-config.yml') | from_yaml }}"
 
 - name: Ajout hpa
   kubernetes.core.k8s:

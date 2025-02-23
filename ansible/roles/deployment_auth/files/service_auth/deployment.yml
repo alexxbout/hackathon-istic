@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: auth-service-deployment
   namespace: auth-namespace
   labels:
     app: auth-service
@@ -19,4 +19,21 @@ spec:
       - name: auth
         image: hackathon2025/skillstasks_repo-auth:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
+        env:
+        - name: SPRING_APPLICATION_NAME
+          value: auth
+        - name: SERVER_PORT
+          value: "8081"
+        - name: SPRING_LDAP_URLS
+          value: ldap://ldap-service-gateway.auth-namespace.svc.cluster.local:1389
+        - name: SPRING_LDAP_BASE
+          value: dc=istic,dc=fr
+        - name: SPRING_LDAP_USERNAME
+          value: cn=admin,dc=istic,dc=fr
+        - name: SPRING_LDAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: auth-service-secret
+              key: LDAP_ADMIN_PASSWORD
+

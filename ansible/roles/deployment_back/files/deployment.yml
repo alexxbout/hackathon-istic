@@ -42,4 +42,5 @@ spec:
         - name: SPRING_LIQUIBASE_PASSWORD
           value: azerty123
         - name: LDAP_USER_SERVICE_BASE_URL
-          value: http://148.60.11.60:32385/api/users
+          value: http://auth-service-gateway.auth-namespace.svc.cluster.local:80/api/users
+
