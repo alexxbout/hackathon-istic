@@ -31,6 +31,14 @@ export interface Session {
     role: TypeRole;
 }
 
+export interface PostProfil {
+    nom: string;
+    prenom: string;
+    experience: number;
+    competenceIds: number[];
+    ville: string;
+}
+
 export class APIUtils {
     private static baseUrl = "/api/v1";
 
@@ -54,7 +62,7 @@ export class APIUtils {
         return axios.get(`${this.baseUrl}/profils/${id}`);
     }
 
-    static async addProfil(profil: Profil) {
+    static async addProfil(profil: PostProfil): Promise<AxiosResponse<Profil>> {
         return axios.post(`${this.baseUrl}/profils`, profil);
     }
 
@@ -69,7 +77,7 @@ export class APIUtils {
     static async searchProfil(params: any) {
         return axios.get(`${this.baseUrl}/profils/search`, { params });
     }
-    
+
     static async uploadCv(id: number, file: string) {
         return axios.post(`${this.baseUrl}/profils/${id}/cv`, { file: file });
     }

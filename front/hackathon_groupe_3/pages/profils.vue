@@ -179,6 +179,10 @@ const handleCreateProfile = () => {
 
     modal.open(ProfileModal, {
         mode: modalState.value,
+        onCreate: (profil: Profil) => {
+            console.log("Création du profil", profil);
+            handleProfilModalCreate(profil);
+        },
         onUpdate: (newMode: ProfilModalMode) => {
             console.log("Mode mis à jour :", newMode);
             modalState.value = newMode;
@@ -212,13 +216,18 @@ const handleShowDetails = (id: number) => {
     });
 };
 
-onMounted(() => {
+const handleProfilModalCreate = (profil: Profil) => {
+    console.log("Création du profil", profil);
+    fecthProfiles();
+};
+
+const fecthProfiles = async () => {
     console.log("Fetching profils.value...");
 
     APIUtils.getProfils().then((response) => {
         console.log(response.data);
 
-        profils.value.push(...response.data);
+        profils.value = response.data as Profil[];
 
         // Fake profile picture
         profils.value.forEach((profil) => {
@@ -233,5 +242,11 @@ onMounted(() => {
 
         skillOptions.value.push(...data.map((competence) => ({ value: competence.id, label: competence.nom })));
     });
+};
+
+onMounted(() => {
+    console.log("Fetching profils.value...");
+
+    // fecthProfiles();
 });
 </script>

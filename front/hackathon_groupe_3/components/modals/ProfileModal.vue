@@ -93,6 +93,7 @@ const props = defineProps<{
 const emits = defineEmits<{
     (e: "close"): void;
     (e: "update", newMode: ProfilModalMode): void;
+    (e: "create", profil: Profil): void;
 }>();
 
 const mode = defineModel<ProfilModalMode>("mode", {
@@ -128,7 +129,7 @@ const name = ref<string>(props.profil?.nom ?? "");
 const firstname = ref<string>(props.profil?.prenom ?? "");
 const ville = ref<string>(props.profil?.ville ?? "");
 const experience = ref<number>(props.profil?.experience ?? 0);
-const competences = ref<string[]>(props.profil?.competences.map((c) => c.nom) ?? []);
+const competences = ref<string[]>(props.profil?.competences.map((c: any) => c.nom) ?? []);
 
 const profilePictureUrl = ref<string | undefined>(props.profil?.profile_picture);
 
@@ -175,7 +176,7 @@ const handleSaveUpdate = async () => {
     const competencesIds: number[] = [];
 
     await APIUtils.getCompetences().then((response) => {
-        response.data.forEach((c) => {
+        response.data.forEach((c: any) => {
             if (competencesIds.includes(c.id!)) {
                 competencesIds.push(c.id!);
             }
@@ -188,21 +189,21 @@ const handleSaveUpdate = async () => {
         ville: ville.value,
         experience: selectedExperience.value,
         competenceIds: competencesIds,
-    }).then((response) => {
-        console.log("Profil updated", response.data);
+    })
+        .then((response) => {
+            console.log("Profil updated", response.data);
 
-        mode.value = ProfilModalMode.INFO;
+            mode.value = ProfilModalMode.INFO;
 
-        console.log("Nouveau mode :", mode.value);
+            console.log("Nouveau mode :", mode.value);
 
-        toast.add({ title: "Profil mis à jour", color: "green" });
+            toast.add({ title: "Profil mis à jour", color: "green" });
+        })
+        .catch((error) => {
+            console.error("Error updating profil", error);
 
-        // TODO: We should update the profil in the parent component
-    }).catch((error) => {
-        console.error("Error updating profil", error);
-
-        toast.add({ title: "Erreur lors de la mise à jour du profil", color: "red" });
-    });
+            toast.add({ title: "Erreur lors de la mise à jour du profil", color: "red" });
+        });
 };
 
 const handleCloseModal = () => {
@@ -216,14 +217,40 @@ const handleProfilePictureUpload = (event: Event) => {
     }
 };
 
-const handleSaveCreate = () => {
+const handleSaveCreate = async () => {
     console.log("Create profil");
 
-    mode.value = ProfilModalMode.INFO;
+    const competencesIds: number[] = [];
 
-    console.log("Nouveau mode :", mode.value);
+    await APIUtils.getCompetences().then((response) => {
+        response.data.forEach((c: any) => {
+            if (competencesIds.includes(c.id!)) {
+                competencesIds.push(c.id!);
+            }
+        });
+    });
 
-    toast.add({ title: "Profil créé", color: "green" });
+    await APIUtils.addProfil({
+        nom: name.value,
+        prenom: firstname.value,
+        ville: ville.value,
+        experience: selectedExperience.value,
+        competenceIds: competencesIds,
+    })
+        .then((response) => {
+            console.log("Profil created", response.data);
+
+            mode.value = ProfilModalMode.INFO;
+
+            console.log("Nouveau mode :", mode.value);
+
+            toast.add({ title: "Profil créé", color: "green" });
+
+            emits("create", response.data);
+        })
+        .catch((error) => {
+            console.error("Error creating profil", error);
+        });
 };
 
 onMounted(() => {
@@ -233,19 +260,12 @@ onMounted(() => {
 
     // Update profil.cvUrl with random oneline pdf cv
 
-    const pdfURLs = [
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Stockholm-Resume-Template-Simple.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/New-York-Resume-Template-Creative.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Vienna-Modern-Resume-Template.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Sydney-Resume-Template-Modern.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/London-Resume-Template-Professional.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Moscow-Creative-Resume-Template.pdf",
-        "https://www.resumeviking.com/wp-content/uploads/2022/02/Amsterdam-Modern-Resume-Template.pdf"
-    ]
+    const pdfURLs = ["https://www.resumeviking.com/wp-content/uploads/2022/02/Stockholm-Resume-Template-Simple.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/New-York-Resume-Template-Creative.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/Vienna-Modern-Resume-Template.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/Sydney-Resume-Template-Modern.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/London-Resume-Template-Professional.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/Moscow-Creative-Resume-Template.pdf", "https://www.resumeviking.com/wp-content/uploads/2022/02/Amsterdam-Modern-Resume-Template.pdf"];
 
     const randomIndex = Math.floor(Math.random() * pdfURLs.length);
 
-    props.profil!.cvUrl = pdfURLs[randomIndex];
+    if (mode.value !== ProfilModalMode.CREATE) {
+        props.profil!.cvUrl = pdfURLs[randomIndex];
+    }
 });
 </script>
