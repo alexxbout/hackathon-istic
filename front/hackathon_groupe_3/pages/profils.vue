@@ -247,6 +247,6 @@ const fecthProfiles = async () => {
 onMounted(() => {
     console.log("Fetching profils.value...");
 
-    // fecthProfiles();
+    fecthProfiles();
 });
 </script>
