@@ -1,9 +1,5 @@
 image: "ubuntu:latest"
 
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-
 stages:
   - build
   - db
@@ -23,6 +19,7 @@ variables:
   DB_PASSWORD: "azerty123"
   DUMP_FILE: "backup_$(date +%Y-%m-%d_%H-%M-%S).sql"  # Use .sql extension for SQL format dump
   ONEDRIVE_REMOTE: "onedrive:dumps"
+  ADMIN_TOKEN: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJVOHV5WlhCZ09HLTNadFFfWW00UThOT19WaTNsU05GTlFiaURqM0R2RU0ifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjIl0sImV4cCI6MTc3MTg3NzE4NywiaWF0IjoxNzQwMzQxMTg3LCJpc3MiOiJodHRwczovL2t1YmVybmV0ZXMuZGVmYXVsdC5zdmMiLCJqdGkiOiI4MmJkYzEwYy1kZmZiLTQxZTAtODQxMy1iNzI3YTE3MzJlOWUiLCJrdWJlcm5ldGVzLmlvIjp7Im5hbWVzcGFjZSI6ImRlZmF1bHQiLCJzZXJ2aWNlYWNjb3VudCI6eyJuYW1lIjoiYWRtaW4tc2EiLCJ1aWQiOiJjMGY3Y2Y0YS1mYzY2LTQ1MzMtYjVmYS1kZDE5ZDZkZjQwMTkifX0sIm5iZiI6MTc0MDM0MTE4Nywic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6YWRtaW4tc2EifQ.Ls6e3pzzb0F0idh5E1FLNyIHjgY-gxgyp3gz4WqgFIPofZPly8rreYww79BncFYlNDVCc6Vmorng-kjgpUAVHsdRLAYFZZPfSlwadK1Cs8Bt_i50nQr5m2aNBZQQfMCRXqQMt5fuscnmshcjBaQHhAX0FvyyUoLuOIesy2fGffJFOlCT3I7NhLTf-_uZxb_wCRAc4K7kc8MqPs1-nD2DdA261UdkUjZiuIx8PXgmQ-fOOCdex5YlMUUEd6TgBZudWGje2IPK3ciQ9N11GojMb9zK0muN1dvvT4Mgsh_5EOqpkUsQoi7UAzBENHcPS4rewFDm_MrCERXOkmVExxOVDA"
 
 services:
   - name: docker:dind
@@ -70,7 +67,7 @@ build_auth_image:
     - docker logout
   only:
     changes:
-      - back/auth/**/* 
+      - back/auth/**/*
 
 
 build_front_image:
@@ -133,7 +130,7 @@ backup_and_upload_database:
 deploy_auth:
   stage: deploy
   tags:
-    - "prod"
+    - "temp"
   before_script:
     - apt-get update && apt-get install -y ansible sshpass
   script:
@@ -149,7 +146,7 @@ deploy_auth:
 deploy_back:
   stage: deploy
   tags:
-    - "prod"
+    - "temp"
   before_script:
     - apt-get update && apt-get install -y ansible sshpass
   script:
@@ -161,16 +158,18 @@ deploy_back:
       - back/**/*
       - ansible/roles/deployment_back/**/*
 
+
 deploy_front:
   stage: deploy
   tags:
-    - "prod"
+    - "temp"
   before_script:
     - apt-get update && apt-get install -y ansible sshpass
   script:
     - export ANSIBLE_CONFIG=ansible/ansible.cfg
     - echo "Deploying authentification..."
     - ansible-playbook ansible/playbooks/deploiement_front.yml -i ansible/hosts
-
-  
-
+  only:
+    changes:
+      - front/**/*
+      - ansible/roles/deployment_front/**/*

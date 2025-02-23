@@ -1,13 +1,13 @@
 # Étape de construction avec Maven et JDK 21
 FROM maven:3.9.5-eclipse-temurin-21 AS build
-WORKDIR /auth
+WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Étape d'exécution avec JDK 21
 FROM openjdk:21-jdk-slim
-WORKDIR /auth
-COPY --from=build /auth/target/*.jar auth.jar
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "auth.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

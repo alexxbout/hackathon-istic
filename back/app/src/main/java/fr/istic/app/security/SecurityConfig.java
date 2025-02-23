@@ -22,8 +22,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/**").permitAll()  // ✅ Allow public endpoints
                         .anyRequest().permitAll()// 🔒 Secure everything else
                 )
-                .csrf(AbstractHttpConfigurer::disable); // ✅ Disable CSRF for non-browser clients (optional)
-
+                .csrf(AbstractHttpConfigurer::disable) // ✅ Disable CSRF for non-browser clients (optional)
+                .cors(AbstractHttpConfigurer::disable); // 🔥 Disabling CORS
 
         return http.build();
     }

@@ -1,11 +1,11 @@
 [control]
-148.60.11.60
+148.60.11.144
 
 [worker1]
-148.60.11.220
+148.60.11.160
 
 [worker2]
-148.60.11.218
+148.60.11.183
 
 [bdd]
 148.60.11.35
@@ -13,22 +13,22 @@
 [control:vars]
 ansible_connection=ssh
 ansible_ssh_user=zprojet
-ansible_ssh_pass=j2vE94ey$#CFG@xvz9
-ansible_become_pass=j2vE94ey$#CFG@xvz9
+ansible_ssh_pass=spaceman333
+ansible_become_pass=spaceman333
 ansible_python_interpreter=/usr/bin/python3
 
 [worker1:vars]
 ansible_connection=ssh
 ansible_ssh_user=zprojet
-ansible_ssh_pass=azerty123
-ansible_become_pass=azerty123
+ansible_ssh_pass=spaceman333
+ansible_become_pass=spaceman333
 ansible_python_interpreter=/usr/bin/python3
 
 [worker2:vars]
 ansible_connection=ssh
 ansible_ssh_user=zprojet
-ansible_ssh_pass=Zistic*!1
-ansible_become_pass=Zistic*!1
+ansible_ssh_pass=spaceman333
+ansible_become_pass=spaceman333
 ansible_python_interpreter=/usr/bin/python3
 
 
@@ -38,5 +38,3 @@ ansible_ssh_user=zprojet
 ansible_ssh_pass=azerty123
 ansible_become_pass=azerty123
 ansible_python_interpreter=/usr/bin/python3
-
-

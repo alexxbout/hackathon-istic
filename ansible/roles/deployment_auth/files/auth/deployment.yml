@@ -1,62 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
+  name: ldap-service-deployment
   namespace: auth-namespace
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      app: auth-service
+      app: ldap-service
   template:
     metadata:
       labels:
-        app: auth-service
+        app: ldap-service
     spec:
-      initContainers:
-        - name: ldap-init
-          image: bitnami/openldap:latest
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              echo "Waiting for OpenLDAP to start..."
-              sleep 5  # Attendre que OpenLDAP démarre
-              echo "Adding LDAP entries..."
-              ldapadd -x -D "cn=admin,dc=istic,dc=fr" -w "${LDAP_ADMIN_PASSWORD}" -H ldap://localhost:1389 -f /docker-entrypoint-initdb.d/users_and_organization.ldif
-              echo "LDAP entries added successfully."
-          env:
-            - name: LDAP_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-secret
-                  key: LDAP_ADMIN_PASSWORD
-          volumeMounts:
-            - name: ldif-volume
-              mountPath: /docker-entrypoint-initdb.d/
       containers:
         - name: openldap
-          image: bitnami/openldap:latest
-          env:
-            - name: LDAP_ORGANISATION
-              value: ISTIC
-            - name: LDAP_DOMAIN
-              value: istic.fr
-            - name: LDAP_ADMIN_USERNAME
-              value: admin
-            - name: LDAP_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ldap-secret
-                  key: LDAP_ADMIN_PASSWORD
-            - name: LDAP_ROOT
-              value: "dc=istic,dc=fr"
+          image: hackathon2025/openldap_with_data:latest
           ports:
-            - containerPort: 1389   
-          volumeMounts:
-            - name: ldif-volume
-              mountPath: /docker-entrypoint-initdb.d/
-              readOnly: true
-      volumes:
-        - name: ldif-volume
-          configMap:
-            name: ldap-config
+            - containerPort: 1389
+          livenessProbe:
+            exec:
+              command: [ "ldapsearch", "-H", "ldap://localhost:1389", "-D", "cn=admin,dc=istic,dc=fr", "-w", "adminpassword", "-b", "dc=istic,dc=fr" ]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 5

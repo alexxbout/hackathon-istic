@@ -11,7 +11,7 @@
     state: present
     kubeconfig: "/home/zprojet/.kube/config"
     namespace: default
-    definition: "{{ lookup('file', 'service.yml') | from_yaml }}"
+    definition: "{{ lookup('file', 'service-config.yml') | from_yaml }}"
 
 - name: Ajout ingress 
   kubernetes.core.k8s:
