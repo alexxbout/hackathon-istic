@@ -14,7 +14,7 @@ public class DeletePoolUseCase {
 
     public void delete(Long id) {
 
-        this.matchPoolCompetenceRepository.deleteAllByProfilId(id);
+        this.matchPoolCompetenceRepository.deleteAllByPoolId(id);
         this.poolRepository.deleteById(id);
     }
 }

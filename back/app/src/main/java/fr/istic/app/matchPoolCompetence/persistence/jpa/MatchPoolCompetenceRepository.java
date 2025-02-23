@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MatchPoolCompetenceRepository extends JpaRepository<MatchPoolCompetence, Long> {
 
-    void deleteAllByProfilId(Long profilId);
+    void deleteAllByPoolId(Long poolId);
 }

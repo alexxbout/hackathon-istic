@@ -14,7 +14,7 @@ public interface ProfilRepository extends JpaRepository<Profil, Long> {
             SELECT DISTINCT p
             FROM Profil p
             JOIN (
-                SELECT mpc.profil.id
+                SELECT mpc.profil.id AS id
                 FROM MatchProfilCompetence mpc
                 WHERE mpc.competence.id IN :competenceIds
                 GROUP BY mpc.profil.id
@@ -36,7 +36,7 @@ public interface ProfilRepository extends JpaRepository<Profil, Long> {
             SELECT DISTINCT p
             FROM Profil p
             JOIN (
-                SELECT mpc.profil.id
+                SELECT mpc.profil.id AS id
                 FROM MatchProfilCompetence mpc
                 WHERE mpc.competence.id IN :competenceIds
                 GROUP BY mpc.profil.id
@@ -50,7 +50,7 @@ public interface ProfilRepository extends JpaRepository<Profil, Long> {
             SELECT DISTINCT p
             FROM Profil p
             JOIN (
-                SELECT mpc.profil.id
+                SELECT mpc.profil.id AS id
                 FROM MatchProfilCompetence mpc
                 WHERE mpc.competence.id IN :competenceIds
                 GROUP BY mpc.profil.id
@@ -86,7 +86,7 @@ public interface ProfilRepository extends JpaRepository<Profil, Long> {
             SELECT DISTINCT p
             FROM Profil p
             JOIN (
-                SELECT mpc.profil.id
+                SELECT mpc.profil.id AS id
                 FROM MatchProfilCompetence mpc
                 WHERE mpc.competence.id IN :competenceIds
                 GROUP BY mpc.profil.id
