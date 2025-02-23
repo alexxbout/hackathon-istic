@@ -24,16 +24,16 @@
 
 <script setup lang="ts">
 import { defineProps, ref } from "vue";
-import type { ProfilCompetences } from "~/types/entities";
+import type { Profil } from "~/types/entities";
 import { ProfilModalMode } from "~/types/modals";
 
 const props = defineProps<{
     mode: ProfilModalMode;
-    profil?: ProfilCompetences;
+    profil?: Profil;
 }>();
 
 const fileInput = ref<HTMLInputElement | null>(null);
-const pdfUrl = ref<string | null>(props.profil?.profil.cv_url ?? null);
+const pdfUrl = ref<string | null>(props.profil?.cvUrl ?? null);
 
 const triggerFileInput = () => {
     if (props.mode !== ProfilModalMode.INFO && !pdfUrl.value) {

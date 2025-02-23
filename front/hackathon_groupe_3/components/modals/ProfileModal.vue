@@ -1,9 +1,9 @@
 <template>
     <UModal :ui="{ overlay: { background: 'bg-gray-400/20 backdrop-blur-md' }, width: '' }">
-        <UCard class="max-h-[90vh] overflow-y-auto w-[70vw]">
-            <div class="grid grid-cols-2 gap-x-5" :class="!props.profil?.profil.cvUrl ? 'divide-x' : ''">
+        <UCard class="max-h-[90vh] w-[70vw] overflow-y-auto">
+            <div class="grid grid-cols-2 gap-x-5" :class="!props.profil?.cvUrl ? 'divide-x' : ''">
                 <!-- Left Column -->
-                <div class="flex flex-col justify-between">
+                <div class="flex flex-col justify-between gap-y-5">
                     <div class="flex flex-col gap-y-10">
                         <span class="text-xl font-semibold">{{ header }}</span>
 
@@ -50,9 +50,11 @@
                             <div class="flex flex-col gap-y-2">
                                 <span>Compétences</span>
                                 <div class="flex flex-wrap gap-2">
-                                    <div v-for="skill in competences">
+                                    <div v-for="(skill, index) in competences">
                                         <!-- TODO: Replace with BadgeSkill component -->
-                                        <UButton color="black" variant="solid">{{ skill }}</UButton>
+                                        <UBadge v-if="mode == ProfilModalMode.INFO" color="black" variant="solid">{{ skill }}</UBadge>
+
+                                        <BadgeCompetence v-else :key="index" :label="skill" @remove="" />
                                     </div>
                                 </div>
                             </div>
@@ -79,12 +81,13 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { ProfilCompetences } from "~/types/entities";
+import type { Competence, Profil } from "~/types/entities";
 import { ProfilModalMode } from "~/types/modals";
+import BadgeCompetence from "~/components/BadgeSkill.vue";
+import { APIUtils } from "~/types/utilsApi";
 
 const props = defineProps<{
-    mode: ProfilModalMode;
-    profil?: ProfilCompetences;
+    profil?: Profil;
 }>();
 
 const emits = defineEmits<{
@@ -121,13 +124,13 @@ const getHeader = (): string => {
     }
 };
 
-const name = ref<string>(props.profil?.profil.nom ?? "");
-const firstname = ref<string>(props.profil?.profil.prenom ?? "");
-const ville = ref<string>(props.profil?.profil.ville ?? "");
-const experience = ref<string>(props.profil?.profil.experience.toString() ?? "");
+const name = ref<string>(props.profil?.nom ?? "");
+const firstname = ref<string>(props.profil?.prenom ?? "");
+const ville = ref<string>(props.profil?.ville ?? "");
+const experience = ref<number>(props.profil?.experience ?? 0);
 const competences = ref<string[]>(props.profil?.competences.map((c) => c.nom) ?? []);
 
-const profilePictureUrl = ref<string | undefined>(props.profil?.profil.profile_picture);
+const profilePictureUrl = ref<string | undefined>(props.profil?.profile_picture);
 
 // TODO: Fetch data from API ???
 const experienceOptions = [
@@ -143,7 +146,7 @@ const experienceOptions = [
 
 const experiencesOptions = ref<{ value: number; label: string }[]>(experienceOptions);
 const experiencePlaceholder = ref("Niveau d'éxpérience");
-const selectedExperience = ref(); // TODO
+const selectedExperience = ref(props.profil?.experience ?? 0);
 
 const handleUpdate = () => {
     console.log("Update profil");
@@ -166,14 +169,40 @@ const handleDeleteProfilPicture = () => {
     // TODO: Call API to delete profil picture
 };
 
-const handleSaveUpdate = () => {
-    console.log("Save profil");
+const handleSaveUpdate = async () => {
+    console.log("Saving profile...");
 
-    mode.value = ProfilModalMode.INFO;
+    const competencesIds: number[] = [];
 
-    console.log("Nouveau mode :", mode.value);
+    await APIUtils.getCompetences().then((response) => {
+        response.data.forEach((c) => {
+            if (competencesIds.includes(c.id!)) {
+                competencesIds.push(c.id!);
+            }
+        });
+    });
 
-    toast.add({ title: "Profil mis à jour", color: "green" });
+    await APIUtils.updateProfil(props.profil?.id!, {
+        nom: name.value,
+        prenom: firstname.value,
+        ville: ville.value,
+        experience: selectedExperience.value,
+        competenceIds: competencesIds,
+    }).then((response) => {
+        console.log("Profil updated", response.data);
+
+        mode.value = ProfilModalMode.INFO;
+
+        console.log("Nouveau mode :", mode.value);
+
+        toast.add({ title: "Profil mis à jour", color: "green" });
+
+        // TODO: We should update the profil in the parent component
+    }).catch((error) => {
+        console.error("Error updating profil", error);
+
+        toast.add({ title: "Erreur lors de la mise à jour du profil", color: "red" });
+    });
 };
 
 const handleCloseModal = () => {
@@ -198,6 +227,25 @@ const handleSaveCreate = () => {
 };
 
 onMounted(() => {
+    console.log("ProfilModal mounted");
+
     header.value = getHeader();
+
+    // Update profil.cvUrl with random oneline pdf cv
+
+    const pdfURLs = [
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Stockholm-Resume-Template-Simple.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/New-York-Resume-Template-Creative.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Vienna-Modern-Resume-Template.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Sydney-Resume-Template-Modern.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/London-Resume-Template-Professional.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Dublin-Resume-Template-Modern.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Moscow-Creative-Resume-Template.pdf",
+        "https://www.resumeviking.com/wp-content/uploads/2022/02/Amsterdam-Modern-Resume-Template.pdf"
+    ]
+
+    const randomIndex = Math.floor(Math.random() * pdfURLs.length);
+
+    props.profil!.cvUrl = pdfURLs[randomIndex];
 });
 </script>

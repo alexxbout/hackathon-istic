@@ -1,31 +1,32 @@
-INSERT INTO competence (id, nom) VALUES (1, 'Compétence 1');
-INSERT INTO competence (id, nom) VALUES (2, 'Compétence 2');
-INSERT INTO competence (id, nom) VALUES (3, 'Compétence 3');
-INSERT INTO competence (id, nom) VALUES (4, 'Compétence 4');
-INSERT INTO competence (id, nom) VALUES (5, 'Compétence 5');
-INSERT INTO competence (id, nom) VALUES (6, 'Compétence 6');
-INSERT INTO competence (id, nom) VALUES (7, 'Compétence 7');
-INSERT INTO competence (id, nom) VALUES (8, 'Compétence 8');
-INSERT INTO competence (id, nom) VALUES (9, 'Compétence 9');
-INSERT INTO competence (id, nom) VALUES (10, 'Compétence 10');
-INSERT INTO competence (id, nom) VALUES (11, 'Compétence 11');
-INSERT INTO competence (id, nom) VALUES (12, 'Compétence 12');
-INSERT INTO competence (id, nom) VALUES (13, 'Compétence 13');
-INSERT INTO competence (id, nom) VALUES (14, 'Compétence 14');
-INSERT INTO competence (id, nom) VALUES (15, 'Compétence 15');
-INSERT INTO competence (id, nom) VALUES (16, 'Compétence 16');
-INSERT INTO competence (id, nom) VALUES (17, 'Compétence 17');
-INSERT INTO competence (id, nom) VALUES (18, 'Compétence 18');
-INSERT INTO competence (id, nom) VALUES (19, 'Compétence 19');
-INSERT INTO competence (id, nom) VALUES (20, 'Compétence 20');
-INSERT INTO competence (id, nom) VALUES (21, 'Compétence 21');
-INSERT INTO competence (id, nom) VALUES (22, 'Compétence 22');
-INSERT INTO competence (id, nom) VALUES (23, 'Compétence 23');
-INSERT INTO competence (id, nom) VALUES (24, 'Compétence 24');
-INSERT INTO competence (id, nom) VALUES (25, 'Compétence 25');
-INSERT INTO competence (id, nom) VALUES (26, 'Compétence 26');
-INSERT INTO competence (id, nom) VALUES (27, 'Compétence 27');
-INSERT INTO competence (id, nom) VALUES (28, 'Compétence 28');
-INSERT INTO competence (id, nom) VALUES (29, 'Compétence 29');
-INSERT INTO competence (id, nom) VALUES (30, 'Compétence 30');
+INSERT INTO competence (id, nom) VALUES 
+(1, 'JavaScript'),
+(2, 'Python'),
+(3, 'Java'),
+(4, 'C#'),
+(5, 'PHP'),
+(6, 'React'),
+(7, 'Node.js'),
+(8, 'Angular'),
+(9, 'Vue.js'),
+(10, 'Docker'),
+(11, 'Kubernetes'),
+(12, 'AWS'),
+(13, 'Azure'),
+(14, 'MySQL'),
+(15, 'PostgreSQL'),
+(16, 'MongoDB'),
+(17, 'Git'),
+(18, 'REST API'),
+(19, 'GraphQL'),
+(20, 'Cybersécurité'),
+(21, 'Machine Learning'),
+(22, 'DevOps'),
+(23, 'Spring Boot'),
+(24, '.NET Core'),
+(25, 'Django'),
+(26, 'Flask'),
+(27, 'TensorFlow'),
+(28, 'PyTorch'),
+(29, 'Swift'),
+(30, 'Kotlin');
 SELECT setval('competence_id_seq', (SELECT MAX(id) FROM competence) + 1);

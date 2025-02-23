@@ -15,6 +15,9 @@
                 </div>
 
                 <div class="flex flex-col gap-y-2">
+                    <!-- Select user -->
+                    <USelect v-model="selectedUser" size="xl" :options="userOptions" placeholder="Choisir un utilisateur" />
+
                     <!-- Login input avec erreur conditionnelle -->
                     <UInput v-model="login" color="gray" icon="lucide:user" placeholder="Login" size="xl" type="text" variant="outline" :status="loginError ? 'danger' : ''" />
                     <!-- Mot de passe input avec erreur conditionnelle -->
@@ -39,10 +42,26 @@
 
 <script setup>
 import { navigateTo } from "#app";
+import { computed, ref } from "vue";
 import { APIUtils } from "~/types/utilsApi";
 
-const login = ref("camille.robert@example.com");
-const password = ref("QWRtaW5TdXBlcg==");
+const users = [
+    { email: "sophie.durand@example.com", password: "UGFzczEyMzQh", role: "RH" },
+    { email: "luc.martin@example.com", password: "U2VjdXJlUHdkMSE=", role: "RH" },
+    { email: "claire.bernard@example.com", password: "SFJwYXNzd29yZDIwMjQ=", role: "RH" },
+    { email: "thomas.lefevre@example.com", password: "UHJvamVjdExlYWQjOTk=", role: "CDP" },
+    { email: "julie.morel@example.com", password: "Q2RQMjAyNCE=", role: "CDP" },
+    { email: "nicolas.dubois@example.com", password: "TWFuYWdlMTIzIQ==", role: "CDP" },
+    { email: "camille.robert@example.com", password: "QWRtaW5TdXBlcg==", role: "ADMIN" },
+    { email: "maxime.garcia@example.com", password: "U2VjdXJlQWRtaW45OQ==", role: "ADMIN" },
+    { email: "emma.petit@example.com", password: "QWRtIW5QYXNzMjI=", role: "ADMIN" }
+];
+
+const userOptions = ref(users.map((user) => ({ value: user.email, label: user.email + " (" + user.role + ")"})));
+const selectedUser = ref(userOptions.value[0].value);
+
+const login = computed(() => selectedUser.value);
+const password = computed(() => users.find((user) => user.email === selectedUser.value)?.password);
 const loginError = ref(false);
 
 const handleConnect = async () => {
@@ -50,23 +69,25 @@ const handleConnect = async () => {
 
     loginError.value = false;
 
-    await APIUtils.login(login.value, password.value)
-        .then((response) => {
-            console.log(response);
+    try {
+        const response = await APIUtils.login(login.value, password.value);
+        console.log(response);
 
-            if (response.status === 200) {
-                console.log("Connection successful");
-                console.log("Redirecting to /profils");
-                navigateTo("/profils");
-            } else {
-                console.error("Error while logging in");
-                loginError.value = true;
-            }
-        })
-        .catch((error) => {
+        if (response.status === 200) {
+            console.log("Connection successful");
+            console.log("Redirecting to /profils");
+
+            await useAuth().fetchSession();
+
+            navigateTo("/profils");
+        } else {
             console.error("Error while logging in");
-            console.error(error);
             loginError.value = true;
-        });
+        }
+    } catch (error) {
+        console.error("Error while logging in");
+        console.error(error);
+        loginError.value = true;
+    }
 };
 </script>

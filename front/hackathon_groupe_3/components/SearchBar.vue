@@ -18,13 +18,7 @@
                 <UButton size="md" icon="i-heroicons-calendar-days-20-solid"> {{ format(selectedPeriod.start, "d MMM, yyy") }} - {{ format(selectedPeriod.end, "d MMM, yyy") }}</UButton>
 
                 <template #panel="{ close }">
-                    <div class="flex items-center sm:divide-x divide-gray-200 dark:divide-gray-800">
-                        <div class="hidden sm:flex flex-col py-4">
-                            <UButton v-for="(range, index) in ranges" :key="index" :label="range.label" color="gray" variant="ghost" class="rounded-none px-6" :class="[isRangeSelected(range.duration) ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50']" truncate @click="selectRange(range.duration)" />
-                        </div>
-
-                        <DatePicker @update:model-value="handlePeriodUpdate" v-model="selectedPeriod" @close="close" />
-                    </div>
+                    <DatePicker @update:model-value="handlePeriodUpdate" v-model="selectedPeriod" @close="close" />
                 </template>
             </UPopover>
         </div>
@@ -60,14 +54,6 @@ const experiencesOptions = defineModel<{ value: number; label: string }[]>("expe
 
 const experiencePlaceholder = ref("Filtrer sur l'expérience");
 
-const ranges = [
-    { label: "7 derniers jours", duration: { days: 7 } },
-    { label: "14 derniers jours", duration: { days: 14 } },
-    { label: "30 derniers jours", duration: { days: 30 } },
-    { label: "3 derniers mois", duration: { months: 3 } },
-    { label: "6 derniers mois", duration: { months: 6 } },
-    { label: "Année", duration: { years: 1 } },
-];
 const selectedPeriod = ref<{ start: Date; end: Date | number }>({ start: new Date(), end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)) });
 
 const isRangeSelected = (duration: Duration) => {

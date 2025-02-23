@@ -5,11 +5,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { TypeRole } from '~/types/roles';
 
 definePageMeta({
     middleware: "auth",
 });
-
-const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
 </script>

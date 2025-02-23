@@ -39,17 +39,18 @@ import { ref } from "vue";
 import PoolModal from "~/components/PoolModal.vue";
 import type { Pool } from "~/types/entities";
 import type { TypeRole } from "~/types/roles";
+import type { Session } from "~/types/utilsApi";
 
 definePageMeta({
     middleware: "auth",
 });
 
-const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
+const role = ref<TypeRole>(useCookie<Session>("session").value.role);
 
 const modal = ref(false);
 const hotreload = ref(true);
 const page = ref(1);
-const itemsPerPage = 6;
+const itemsPerPage = 4;
 const newPool = ref<Pool>({
     id: -1,
     user_id: -1,

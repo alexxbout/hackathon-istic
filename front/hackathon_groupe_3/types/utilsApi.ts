@@ -1,6 +1,6 @@
 import type { AxiosResponse } from "axios";
 import axios from "axios";
-import type { Competence, Pool, Profil, Projet, Reservation, User } from "./entities";
+import type { Competence, Pool, Profil, Projet, Reservation, UpdateProfil, User } from "./entities";
 import type { TypeRole } from "./roles";
 
 interface Login {
@@ -22,7 +22,7 @@ interface UserSession {
     image: string;
 }
 
-interface Session {
+export interface Session {
     nom: string;
     prenom: string;
     mail: string;
@@ -58,7 +58,7 @@ export class APIUtils {
         return axios.post(`${this.baseUrl}/profils`, profil);
     }
 
-    static async updateProfil(id: number, profil: Partial<Profil>) {
+    static async updateProfil(id: number, profil: UpdateProfil) {
         return axios.put(`${this.baseUrl}/profils/${id}`, profil);
     }
 
@@ -69,8 +69,12 @@ export class APIUtils {
     static async searchProfil(params: any) {
         return axios.get(`${this.baseUrl}/profils/search`, { params });
     }
+    
+    static async uploadCv(id: number, file: string) {
+        return axios.post(`${this.baseUrl}/profils/${id}/cv`, { file: file });
+    }
 
-    static async getProjets() {
+    static async getProjets(): Promise<AxiosResponse<Projet[]>> {
         return axios.get(`${this.baseUrl}/projets`);
     }
 
@@ -114,7 +118,7 @@ export class APIUtils {
         return axios.delete(`${this.baseUrl}/reservations/${id}`);
     }
 
-    static async getCompetences() {
+    static async getCompetences(): Promise<AxiosResponse<Competence[]>> {
         return axios.get(`${this.baseUrl}/competences`);
     }
 
@@ -126,8 +130,8 @@ export class APIUtils {
         return axios.delete(`${this.baseUrl}/competences/${id}`);
     }
 
-    static async getUsers() {
-        return axios.get(`${this.baseUrl}/users`);
+    static async getUsers(): Promise<AxiosResponse<User[]>> {
+        return axios.get(`${this.baseUrl}/users/all`);
     }
 
     static async addUser(user: User) {

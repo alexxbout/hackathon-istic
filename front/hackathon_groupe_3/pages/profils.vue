@@ -11,24 +11,7 @@
                     </div>
                     <div class="flex items-center justify-center w-max gap-x-2">
                         <UButton v-if="role != 'cdp'" color="gray" icon="lucide:user-plus" variant="soft" @click="handleCreateProfile">{{ createProfileButton }} </UButton>
-                        <UButton v-if="role != 'rh'" :disabled="!selectedProfiles.size" color="green" icon="lucide:mouse-pointer-click" trailing-icon="" variant="soft" @click="handleAddProfiles">{{ addSelectionToProject }} </UButton>
-                        <UButton color="red" icon="lucide:circle-x" variant="soft" @click="handleClearFilters">{{ clearFilters }} </UButton>
-                        <UButton v-if="role != 'rh'" color="yellow" icon="lucide:circle-slash-2" variant="soft" @click="handleUnselectAll">{{ deselectAll }} </UButton>
-                    </div>
-                </div>
-    <div class="h-screen w-screen flex flex-col">
-        <Header />
-        <div class="flex items-center justify-center w-full h-full">
-            <div class="flex flex-col items-center w-full h-full py-10 gap-y-5 mx-80">
-                <!-- Header -->
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center justify-center gap-x-2">
-                        <span class="text-3xl font-medium">Profils</span>
-                        <span class="text-2xl self-end">({{ filteredCustomProfils.length }})</span>
-                    </div>
-                    <div class="flex items-center justify-center w-max gap-x-2">
-                        <UButton v-if="role != 'cdp'" color="gray" icon="lucide:user-plus" variant="soft" @click="handleCreateProfile">{{ createProfileButton }} </UButton>
-                        <UButton v-if="role != 'rh'" :disabled="!selectedProfiles.size" color="green" icon="lucide:mouse-pointer-click" trailing-icon="" variant="soft" @click="handleAddProfiles">{{ addSelectionToProject }} </UButton>
+                        <UButton v-if="role != 'rh'" :disabled="selectedProfiles.size == 0" color="green" icon="lucide:mouse-pointer-click" trailing-icon="" variant="soft" @click="handleAddProfiles">{{ addSelectionToProject }} </UButton>
                         <UButton color="red" icon="lucide:circle-x" variant="soft" @click="handleClearFilters">{{ clearFilters }} </UButton>
                         <UButton v-if="role != 'rh'" color="yellow" icon="lucide:circle-slash-2" variant="soft" @click="handleUnselectAll">{{ deselectAll }} </UButton>
                     </div>
@@ -45,31 +28,23 @@
             </div>
         </div>
     </div>
-                <UPagination v-show="filteredCustomProfils.length > 6" v-model="page" :page-count="6" :total="filteredCustomProfils.length" size="xl" />
-            </div>
-        </div>
-    </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, nextTick, ref } from "vue";
-import { computed, nextTick, ref } from "vue";
 import AddProfillProjectModal from "~/components/modals/AddProfillProjectModal.vue";
 import ProfileModal from "~/components/modals/ProfileModal.vue";
 import type SearchBar from "~/components/SearchBar.vue";
-import type { Profil, ProfilCompetences } from "~/types/entities";
+import type { Profil } from "~/types/entities";
 import { ProfilModalMode } from "~/types/modals";
 import type { TypeRole } from "~/types/roles";
-import { APIUtils } from "~/types/utilsApi";
+import { APIUtils, type Session } from "~/types/utilsApi";
 
 definePageMeta({
     middleware: "auth",
-    middleware: "auth",
 });
 
-const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
-
-const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
+const role = ref<TypeRole>(useCookie<Session>("session").value.role);
 
 const modal = useModal();
 
@@ -77,6 +52,7 @@ const searchBarElement = ref<InstanceType<typeof SearchBar>>();
 const page = ref(1);
 const itemsPerPage = 6;
 const selectedProfiles = ref(new Set<number>());
+const selectedProfilesComputed = computed(() => profils.value.filter((profil) => selectedProfiles.value.has(profil.id!)));
 const hotreload = ref(true);
 const modalState = ref<ProfilModalMode>();
 
@@ -84,8 +60,6 @@ const modalState = ref<ProfilModalMode>();
 const selectedSkills = ref<number[]>([]);
 const selectedExperience = ref<number | null>(null);
 const selectedPeriod = ref<{ start: Date; end: Date | number }>({
-    start: new Date(),
-    end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
     start: new Date(),
     end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
 });
@@ -100,17 +74,13 @@ const deselectAll = ref<string>("Tout désélectionner");
 const profils = ref<Profil[]>([]);
 
 // Options des filtres
-const experienceOptions = computed<{ value: number; label: string }[]>(() => 
-	Array.from(
-		new Set(
-			profils.value.map((profil) => profil.experience)
-		)
-	)
-	.map((experience) => ({
-		value: experience,
-		label: `+${experience} ans`,
-	}))
-	.sort((a, b) => a.value - b.value)
+const experienceOptions = computed<{ value: number; label: string }[]>(() =>
+    Array.from(new Set(profils.value.map((profil) => profil.experience)))
+        .map((experience) => ({
+            value: experience,
+            label: `+${experience} ans`,
+        }))
+        .sort((a, b) => a.value - b.value)
 );
 
 const skillOptions = ref<{ value: number; label: string }[]>([]);
@@ -130,16 +100,7 @@ const filteredCustomProfils = computed(() => {
                 return false;
             }
         }
-        // Filtrer par compétences (toutes les compétences sélectionnées doivent être présentes)
-        if (selectedSkills.value.length > 0) {
-            const profilSkillIds = profil.competences.map((comp) => comp.id);
-            if (!selectedSkills.value.every((skillId) => profilSkillIds.includes(skillId))) {
-                return false;
-            }
-        }
 
-        return true;
-    });
         return true;
     });
 });
@@ -148,17 +109,10 @@ const filteredCustomProfils = computed(() => {
 const paginatedCustomProfils = computed(() => {
     const start = (page.value - 1) * itemsPerPage;
     return filteredCustomProfils.value.slice(start, start + itemsPerPage);
-    const start = (page.value - 1) * itemsPerPage;
-    return filteredCustomProfils.value.slice(start, start + itemsPerPage);
 });
 
 // Gérer la sélection/désélection
 const toggleSelection = (id: number) => {
-    if (selectedProfiles.value.has(id)) {
-        selectedProfiles.value.delete(id);
-    } else {
-        selectedProfiles.value.add(id);
-    }
     if (selectedProfiles.value.has(id)) {
         selectedProfiles.value.delete(id);
     } else {
@@ -171,15 +125,9 @@ const updateSkills = (skills: number[]) => {
     console.log("Mise à jour des compétences sélectionnées", skills);
     selectedSkills.value = skills;
     console.log(selectedSkills.value);
-    console.log("Mise à jour des compétences sélectionnées", skills);
-    selectedSkills.value = skills;
-    console.log(selectedSkills.value);
 };
 
 const updateExperience = (experience: number) => {
-    console.log("Mise à jour de l'expérience sélectionnée", experience);
-    selectedExperience.value = experience;
-    console.log(selectedExperience.value);
     console.log("Mise à jour de l'expérience sélectionnée", experience);
     selectedExperience.value = experience;
     console.log(selectedExperience.value);
@@ -188,17 +136,10 @@ const updateExperience = (experience: number) => {
 const updatePeriod = (period: { start: Date; end: Date | number }) => {
     console.log("Mise à jour de la période sélectionnée", period);
     selectedPeriod.value = period;
-    console.log("Mise à jour de la période sélectionnée", period);
-    selectedPeriod.value = period;
 };
 
 // Effacer les filtres
 const handleClearFilters = () => {
-    console.log("Effacement des filtres...");
-    searchBarElement.value?.clearFilters();
-    selectedSkills.value = [];
-    selectedExperience.value = null;
-    selectedPeriod.value = { start: new Date(), end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)) };
     console.log("Effacement des filtres...");
     searchBarElement.value?.clearFilters();
     selectedSkills.value = [];
@@ -217,10 +158,9 @@ const handleUnselectAll = async () => {
 
 const handleAddProfiles = () => {
     console.log("Ajout des profils sélectionnés à un projet...");
-    console.log("Ajout des profils sélectionnés à un projet...");
 
     modal.open(AddProfillProjectModal, {
-        profiles: profils.value,
+        profiles: selectedProfilesComputed.value,
         onAssign: () => {
             console.log("Assignation des profils à un projet...");
             modal.close();
@@ -234,22 +174,9 @@ const handleAddProfiles = () => {
 
 const handleCreateProfile = () => {
     console.log("Création d'un profil...");
-    console.log("Création d'un profil...");
 
     modalState.value = ProfilModalMode.CREATE;
-    modalState.value = ProfilModalMode.CREATE;
 
-    modal.open(ProfileModal, {
-        mode: modalState.value,
-        onUpdate: (newMode: ProfilModalMode) => {
-            console.log("Mode mis à jour :", newMode);
-            modalState.value = newMode;
-        },
-        onClose() {
-            console.log("Fermeture du modal");
-            modal.close();
-        },
-    });
     modal.open(ProfileModal, {
         mode: modalState.value,
         onUpdate: (newMode: ProfilModalMode) => {
@@ -263,36 +190,17 @@ const handleCreateProfile = () => {
     });
 };
 
-const createProfilCompetences = (profilId: number): ProfilCompetences => {
-    const profil = profils.value.find((profil) => profil.id === profilId)!;
-    return {
-        profil: profil,
-        competences: profils.value.find((profil) => profil.id === profilId)!.competences,
-    };
+const getProfilFromId = (profilId: number): Profil => {
+    return profils.value.find((profil) => profil.id === profilId)!;
 };
 
 const handleShowDetails = (id: number) => {
     console.log("Affichage des détails du profil", id);
-    console.log("Affichage des détails du profil", id);
 
-    modalState.value = ProfilModalMode.INFO;
     modalState.value = ProfilModalMode.INFO;
 
     modal.open(ProfileModal, {
-        mode: modalState.value,
-        profil: createProfilCompetences(id),
-        onUpdate: (newMode: ProfilModalMode) => {
-            console.log("Mode mis à jour :", newMode);
-            modalState.value = newMode;
-        },
-        onClose() {
-            console.log("Fermeture du modal");
-            modal.close();
-        },
-    });
-    modal.open(ProfileModal, {
-        mode: modalState.value,
-        profil: createProfilCompetences(id),
+        profil: getProfilFromId(id),
         onUpdate: (newMode: ProfilModalMode) => {
             console.log("Mode mis à jour :", newMode);
             modalState.value = newMode;
@@ -311,14 +219,19 @@ onMounted(() => {
         console.log(response.data);
 
         profils.value.push(...response.data);
+
+        // Fake profile picture
+        profils.value.forEach((profil) => {
+            profil.profile_picture = `https://i.pravatar.cc/150?img=${profil.id}`;
+        });
     });
 
-	APIUtils.getCompetences().then((response) => {
+    APIUtils.getCompetences().then((response) => {
         console.log(response.data);
 
-		const data = response.data as { id: number, nom: string }[];
+        const data = response.data as { id: number; nom: string }[];
 
-		skillOptions.value.push(...data.map((competence) => ({ value: competence.id, label: competence.nom })));
+        skillOptions.value.push(...data.map((competence) => ({ value: competence.id, label: competence.nom })));
     });
 });
 </script>
