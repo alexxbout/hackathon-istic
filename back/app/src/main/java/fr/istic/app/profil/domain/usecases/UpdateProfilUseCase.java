@@ -31,7 +31,7 @@ public class UpdateProfilUseCase {
 
         var siteAddr = this.siteAddrRepository
                 .findByVille(dto.ville)
-                .orElseGet(()->this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)));
+                .orElseGet(() -> this.createSiteAddrUseCase.create(new CreateSiteAddrUseCase.CreateSiteAddrDto(dto.ville)));
 
         profil.setNom(dto.nom);
         profil.setPrenom(dto.prenom);

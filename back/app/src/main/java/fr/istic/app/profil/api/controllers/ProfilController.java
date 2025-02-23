@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class ProfilController {
     private final ReadProfilUseCase readProfilUseCase;
     private final UpdateProfilUseCase updateProfilDtoUseCase;
     private final DeleteProfilUseCase deleteProfilUseCase;
+    private final SearchProfilUseCase searchProfilUseCase;
     private final ProfilDtoMapper profilDtoMapper;
     private final ReadCVUseCase readCVUseCase;
     private final CreateCVUseCase createCVUseCase;
@@ -99,9 +101,11 @@ public class ProfilController {
 
     @GetMapping(path = "/search", produces = "application/json")
     @Operation(summary = "Search a profil by competence, experience, date_debut, date_fin")
-    public ResponseEntity<List<ProfilDto>> searchProfil(@RequestParam List<Long> competence, @RequestParam Integer experience, @RequestParam String date_debut, @RequestParam String date_fin) {
-        //TODO
-        return ResponseEntity.status(204).build();
+    public ResponseEntity<List<ProfilDto>> searchProfil(@RequestParam(required = false) List<Long> competence, @RequestParam(required = false) Integer experience, @RequestParam(required = false) LocalDate date_debut, @RequestParam(required = false) LocalDate date_fin) {
+
+        var found = this.searchProfilUseCase.search(competence, experience, date_debut, date_fin);
+        var mapped = this.profilDtoMapper.toDto(found);
+        return ResponseEntity.ok(mapped);
     }
 
 
