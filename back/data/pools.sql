@@ -1,51 +1,52 @@
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (1, 'user9@example.com', 'Pool 1', 11);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (2, 'user5@example.com', 'Pool 2', 19);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (3, 'user2@example.com', 'Pool 3', 6);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (4, 'user9@example.com', 'Pool 4', 15);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (5, 'user10@example.com', 'Pool 5', 6);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (6, 'user7@example.com', 'Pool 6', 6);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (7, 'user5@example.com', 'Pool 7', 7);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (8, 'user5@example.com', 'Pool 8', 14);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (9, 'user5@example.com', 'Pool 9', 13);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (10, 'user5@example.com', 'Pool 10', 2);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (11, 'user9@example.com', 'Pool 11', 5);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (12, 'user4@example.com', 'Pool 12', 7);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (13, 'user1@example.com', 'Pool 13', 2);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (14, 'user9@example.com', 'Pool 14', 3);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (15, 'user6@example.com', 'Pool 15', 11);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (16, 'user3@example.com', 'Pool 16', 19);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (17, 'user9@example.com', 'Pool 17', 3);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (18, 'user9@example.com', 'Pool 18', 3);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (19, 'user1@example.com', 'Pool 19', 17);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (20, 'user6@example.com', 'Pool 20', 13);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (21, 'user2@example.com', 'Pool 21', 10);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (22, 'user9@example.com', 'Pool 22', 19);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (23, 'user2@example.com', 'Pool 23', 15);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (24, 'user7@example.com', 'Pool 24', 7);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (25, 'user10@example.com', 'Pool 25', 15);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (26, 'user10@example.com', 'Pool 26', 14);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (27, 'user4@example.com', 'Pool 27', 15);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (28, 'user9@example.com', 'Pool 28', 20);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (29, 'user7@example.com', 'Pool 29', 10);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (30, 'user8@example.com', 'Pool 30', 1);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (31, 'user9@example.com', 'Pool 31', 7);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (32, 'user10@example.com', 'Pool 32', 9);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (33, 'user3@example.com', 'Pool 33', 9);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (34, 'user1@example.com', 'Pool 34', 12);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (35, 'user7@example.com', 'Pool 35', 9);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (36, 'user1@example.com', 'Pool 36', 15);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (37, 'user3@example.com', 'Pool 37', 20);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (38, 'user9@example.com', 'Pool 38', 12);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (39, 'user6@example.com', 'Pool 39', 12);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (40, 'user1@example.com', 'Pool 40', 12);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (41, 'user2@example.com', 'Pool 41', 16);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (42, 'user9@example.com', 'Pool 42', 17);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (43, 'user10@example.com', 'Pool 43', 4);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (44, 'user9@example.com', 'Pool 44', 11);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (45, 'user7@example.com', 'Pool 45', 2);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (46, 'user7@example.com', 'Pool 46', 5);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (47, 'user8@example.com', 'Pool 47', 9);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (48, 'user5@example.com', 'Pool 48', 12);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (49, 'user6@example.com', 'Pool 49', 13);
-INSERT INTO pool (id, user_mail, nom, experience) VALUES (50, 'user3@example.com', 'Pool 50', 15);
+INSERT INTO pool (id, user_mail, nom, experience) VALUES 
+(1, 'frontend@techcorp.com', 'Équipe Frontend', 5),
+(2, 'devops@techcorp.com', 'Spécialistes DevOps', 8),
+(3, 'data-science@techcorp.com', 'Unité Data Science', 6),
+(4, 'mobile@techcorp.com', 'Développeurs Mobile', 4),
+(5, 'cloud@techcorp.com', 'Ingénieurs Cloud', 7),
+(6, 'ai@techcorp.com', 'Équipe IA/ML', 5),
+(7, 'security@techcorp.com', 'Sécurité Informatique', 9),
+(8, 'fullstack@techcorp.com', 'Développeurs Fullstack', 6),
+(9, 'qa@techcorp.com', 'Assurance Qualité', 5),
+(10, 'backend@techcorp.com', 'Équipe Backend', 7),
+(11, 'database@techcorp.com', 'Administrateurs DB', 10),
+(12, 'ux@techcorp.com', 'Designers UX/UI', 4),
+(13, 'blockchain@techcorp.com', 'Développeurs Blockchain', 3),
+(14, 'iot@techcorp.com', 'Ingénieurs IoT', 5),
+(15, 'support@techcorp.com', 'Support Technique', 2),
+(16, 'architecture@techcorp.com', 'Architectes Solutions', 12),
+(17, 'integration@techcorp.com', 'Intégration Continue', 6),
+(18, 'analytics@techcorp.com', 'Analystes Données', 5),
+(19, 'networking@techcorp.com', 'Réseaux et Infrastructure', 8),
+(20, 'embedded@techcorp.com', 'Systèmes Embarqués', 7),
+(21, 'scrum@techcorp.com', 'Masters Scrum', 9),
+(22, 'erp@techcorp.com', 'Développeurs ERP', 10),
+(23, 'game@techcorp.com', 'Développement Jeux', 4),
+(24, 'ar-vr@techcorp.com', 'Réalité Augmentée/Virtuelle', 3),
+(25, 'fintech@techcorp.com', 'Équipe Fintech', 6),
+(26, 'consulting@techcorp.com', 'Consultants Tech', 15),
+(27, 'research@techcorp.com', 'R&D Innovation', 5),
+(28, 'automation@techcorp.com', 'Automatisation Processus', 7),
+(29, 'compliance@techcorp.com', 'Conformité Technique', 8),
+(30, 'accessibility@techcorp.com', 'Expert Accessibilité', 4),
+(31, 'i18n@techcorp.com', 'Internationalisation', 5),
+(32, 'performance@techcorp.com', 'Optimisation Performance', 6),
+(33, 'legacy@techcorp.com', 'Migration Systèmes Legacy', 10),
+(34, 'documentation@techcorp.com', 'Rédaction Technique', 3),
+(35, 'training@techcorp.com', 'Formation Technologique', 9),
+(36, 'monitoring@techcorp.com', 'Surveillance Systèmes', 7),
+(37, 'crm@techcorp.com', 'Développeurs CRM', 5),
+(38, 'ecommerce@techcorp.com', 'Expert E-commerce', 6),
+(39, 'api@techcorp.com', 'Intégration API', 4),
+(40, 'microservices@techcorp.com', 'Architecture Microservices', 5),
+(41, 'serverless@techcorp.com', 'Serverless Experts', 3),
+(42, 'containers@techcorp.com', 'Spécialistes Containers', 6),
+(43, 'frontend-ops@techcorp.com', 'Frontend Ops', 4),
+(44, 'ai-ethics@techcorp.com', 'Éthique IA', 2),
+(45, 'devrel@techcorp.com', 'Relations Développeurs', 5),
+(46, 'low-code@techcorp.com', 'Plateformes Low-Code', 3),
+(47, 'opensource@techcorp.com', 'Contributeurs Open Source', 7),
+(48, 'sre@techcorp.com', 'Ingénieurs Fiabilité', 8),
+(49, 'quantum@techcorp.com', 'Recherche Quantique', 4),
+(50, 'web3@techcorp.com', 'Développeurs Web3', 3);
 SELECT setval('pool_id_seq', (SELECT MAX(id) FROM pool) + 1);

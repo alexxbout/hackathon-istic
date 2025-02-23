@@ -1,26 +1,27 @@
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (1, 'Projet 1', '2024-05-19', '2025-10-05');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (2, 'Projet 2', '2024-06-04', '2025-10-15');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (3, 'Projet 3', '2024-06-06', '2025-05-17');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (4, 'Projet 4', '2024-06-27', '2025-07-10');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (5, 'Projet 5', '2024-11-29', '2025-07-26');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (6, 'Projet 6', '2024-09-08', '2025-10-11');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (7, 'Projet 7', '2024-09-04', '2025-06-14');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (8, 'Projet 8', '2025-01-15', '2025-09-03');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (9, 'Projet 9', '2025-01-19', '2025-07-28');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (10, 'Projet 10', '2024-07-25', '2025-03-21');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (11, 'Projet 11', '2024-06-09', '2025-05-26');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (12, 'Projet 12', '2024-11-26', '2025-10-30');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (13, 'Projet 13', '2024-11-23', '2025-11-05');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (14, 'Projet 14', '2024-07-19', '2025-09-20');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (15, 'Projet 15', '2024-08-17', '2025-05-26');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (16, 'Projet 16', '2024-07-16', '2025-04-11');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (17, 'Projet 17', '2024-05-11', '2025-09-26');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (18, 'Projet 18', '2024-10-27', '2025-05-03');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (19, 'Projet 19', '2024-06-26', '2025-07-06');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (20, 'Projet 20', '2024-10-16', '2025-06-02');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (21, 'Projet 21', '2024-06-29', '2025-04-12');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (22, 'Projet 22', '2024-11-23', '2025-08-04');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (23, 'Projet 23', '2024-07-04', '2025-08-23');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (24, 'Projet 24', '2024-05-19', '2025-12-08');
-INSERT INTO projet (id, nom, date_debut, date_fin) VALUES (25, 'Projet 25', '2024-09-25', '2025-07-31');
+INSERT INTO projet (id, nom, date_debut, date_fin) VALUES 
+(1, 'Plateforme E-commerce', '2024-06-01', '2024-12-15'),
+(2, 'Application Mobile de Santé', '2024-07-01', '2025-01-30'),
+(3, 'Système de Gestion de Projets Agile', '2024-06-15', '2024-11-30'),
+(4, 'Chatbot IA pour Service Client', '2024-08-01', '2025-02-28'),
+(5, 'Migration vers le Cloud Hybride', '2024-09-01', '2025-06-30'),
+(6, 'Outil d Analyse de Données en Temps Réel', '2024-07-15', '2024-12-31'),
+(7, 'Refonte de l Architecture Microservices', '2024-06-01', '2025-03-15'),
+(8, 'Solution Fintech Sécurisée', '2024-08-15', '2025-05-01'),
+(9, 'Plateforme d Apprentissage en Ligne', '2024-07-01', '2024-11-30'),
+(10, 'Système de Reconnaissance Faciale', '2024-09-01', '2025-04-30'),
+(11, 'Application IoT pour Maison Connectée', '2024-06-01', '2024-12-31'),
+(12, 'ERP Personnalisé', '2024-08-01', '2025-07-31'),
+(13, 'Portail Employé avec SSO', '2024-07-15', '2024-12-15'),
+(14, 'Migration de Données vers NoSQL', '2024-09-01', '2025-01-31'),
+(15, 'Dashboard Analytics Temps Réel', '2024-06-01', '2024-10-31'),
+(16, 'API Gateway Distribuée', '2024-08-01', '2025-02-28'),
+(17, 'Application Blockchain', '2024-07-01', '2025-05-31'),
+(18, 'Système de Recommendation IA', '2024-09-15', '2025-03-15'),
+(19, 'Outil CI/CD Avancé', '2024-06-01', '2024-11-30'),
+(20, 'Application de Gestion des Ressources', '2024-08-01', '2025-01-31'),
+(21, 'Solution de Paiement Mobile', '2024-07-01', '2024-12-31'),
+(22, 'Plateforme de Streaming Vidéo', '2024-09-01', '2025-06-30'),
+(23, 'Système de Gestion des Tickets', '2024-06-15', '2024-10-31'),
+(24, 'Application de Réalité Augmentée', '2024-08-01', '2025-04-30'),
+(25, 'Framework de Tests Automatisés', '2024-07-01', '2024-11-30');
 SELECT setval('projet_id_seq', (SELECT MAX(id) FROM projet) + 1);

@@ -8,8 +8,8 @@
         <!-- Tableau avec sélection de lignes -->
         <UTable v-model="selectedRows" :rows="paginatedRows" :columns="columns" :sort="{ column: sortColumn, direction: sortDirection }" @sort="handleSort" selectable="multiple" class="w-full">
             <!-- Slot personnalisé pour l'image de profil -->
-            <template #profile_picture-data="{ row }">
-                <img :src="row.profile_picture" alt="Photo de profil" class="w-10 h-10 rounded-full" />
+            <template #photo-data="{ row }">
+                <UAvatar size="lg" :src="row.profile_picture" :alt="row.nom + row.prenom" />
             </template>
 
             <!-- Slot personnalisé pour le CV -->
@@ -32,20 +32,22 @@ import { APIUtils } from "~/types/utilsApi";
 
 const profils = ref<Profil[]>([]);
 
-const fetchProfils = async () => {
-    try {
-        const response = await APIUtils.getProfils();
-        profils.value = response.data;
-    } catch (error) {
-        console.error("Erreur lors de la récupération des profils", error);
-    }
-};
+onMounted(async () => {
+    APIUtils.getProfils().then((response) => {
+        console.log(response.data);
 
-onMounted(fetchProfils);
+        profils.value.push(...response.data);
+
+        // Fake profile picture
+        profils.value.forEach((profil) => {
+            profil.profile_picture = `https://i.pravatar.cc/150?img=${profil.id}`;
+        });
+    });
+});
 
 const columns = ref([
     { key: "id", label: "ID", sortable: true },
-    { key: "profile_picture", label: "Photo de profil" },
+    { key: "photo", label: "Photo de profil" },
     { key: "nom", label: "Nom", sortable: true },
     { key: "prenom", label: "Prénom", sortable: true },
     { key: "experience", label: "Expérience (années)", sortable: true },

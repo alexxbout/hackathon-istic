@@ -16,16 +16,20 @@ export interface Profil {
     ville: string;
 }
 
-export interface ProfilCompetences {
-    profil: Profil;
-    competences: Competence[];
+export interface UpdateProfil {
+    nom: string;
+    prenom: string;
+    experience: number;
+    competenceIds: number[];
+    ville: string;
 }
 
 export interface Projet {
     id?: number;
     nom: string;
-    date_debut: Date;
-    date_fin: Date;
+    dateDebut: Date;
+    dateFin: Date;
+    reservations: Reservation[];
 }
 
 export interface Pool {
@@ -38,7 +42,7 @@ export interface Pool {
 
 export interface User {
     id?: number;
-    email: string;
+    mail: string;
     role: TypeRole;
     nom: string;
     prenom: string;
@@ -66,8 +70,8 @@ export interface MatchPoolCompetence {
 
 export interface Reservation {
     id?: number;
-    profil_id: number;
-    date_debut: Date;
-    date_fin: Date;
-    id_projet: number;
+    projetId: number;
+    profil: Profil;
+    dateDebut: Date;
+    dateFin: Date;
 }

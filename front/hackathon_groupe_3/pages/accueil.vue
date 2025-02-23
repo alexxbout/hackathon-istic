@@ -38,12 +38,13 @@ import DeleteUser from "~/components/DeleteUser.vue";
 import TableUser from "~/components/TableUsers.vue";
 import type { User } from "~/types/entities";
 import type { TypeRole } from "~/types/roles";
+import type { Session } from "~/types/utilsApi";
 
 definePageMeta({
     middleware: "auth",
 });
 
-const role = ref<TypeRole>(useCookie<TypeRole>("role").value);
+const role = ref<TypeRole>(useCookie<Session>("session").value.role);
 
 // État pour suivre l'onglet actif
 const activeTab = ref(0);
