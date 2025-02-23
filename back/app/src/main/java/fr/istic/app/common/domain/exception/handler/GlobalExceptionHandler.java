@@ -1,5 +1,6 @@
 package fr.istic.app.common.domain.exception.handler;
 
+import fr.istic.app.common.domain.exception.*;
 import fr.istic.app.common.domain.exception.NotFoundException;
 import fr.istic.app.common.domain.exception.NotImplementedException;
 import fr.istic.app.common.domain.exception.ProfilExistsInReservationException;
@@ -43,4 +44,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SearchParamsAllNull.class)
+    public ResponseEntity<Map<String, String>> handleSearchParamsAllNull(SearchParamsAllNull ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
