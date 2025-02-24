@@ -40,7 +40,7 @@ La base de données PostgreSQL est utilisée pour stocker les informations des e
 
 ![Base de données](./docs/images/bdd.png)
 
-## 🏢 **Infrastructure & Déploiement**  
+## **Infrastructure & Déploiement**  
 L’application repose sur une infrastructure modulaire et scalable.  
 
 - **3 machines virtuelles dédiées :**  
