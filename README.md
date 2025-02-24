@@ -101,5 +101,5 @@ Notre équipe a adopté une méthodologie Agile pour assurer une répartition ef
 docker-compose up -d
 ```
 
-## 📧 **Contact & Contributions**  
+## **Contact & Contributions**  
 Pour toute question ou suggestion, n’hésitez pas à nous contacter.
